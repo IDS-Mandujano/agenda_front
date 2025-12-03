@@ -126,6 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 3. CARGAR Y RENDERIZAR USUARIOS
     // ==========================================
+    // ==========================================
+    // 3. CARGAR Y RENDERIZAR USUARIOS
+    // ==========================================
     async function cargarUsuarios() {
         try {
             const res = await fetch(`${API_BASE_URL}/admin/usuarios`, {
@@ -152,16 +155,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!esAsesor && !esCliente) return;
 
-                // 1. Determinar el estado real (Si viene null, asumimos activo, pero ahora Java lo mandará bien)
+                // 1. Determinar el estado real
                 const estadoReal = u.estado ? u.estado.toLowerCase() : 'activo';
 
-                // 2. Contadores (Usando la variable estadoReal corregida)
+                // 2. Contadores
                 if (esAsesor) countAsesores++; else countClientes++;
 
                 if (estadoReal === 'activo') {
                     countActivos++;
                 }
-                // Nota: Los inactivos se calculan al final restando del total
 
                 // Preparar datos visuales
                 const nombreCompleto = `${u.nombre} ${u.apellido}`.trim();
@@ -169,6 +171,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Clase CSS para el color (activo=verde, inactivo=rojo/gris)
                 const estadoClass = estadoReal === 'activo' ? 'activo' : 'inactivo';
+
+                // --- LÓGICA DE FOTO VS INICIALES ---
+                let avatarHTML = '';
+
+                if (u.img) {
+                    // SI TIENE FOTO: Mostramos la imagen
+                    // Validamos si es ruta absoluta (http) o relativa (/uploads)
+                    const srcImagen = u.img.startsWith('http') ? u.img : `${API_BASE_URL}${u.img}`;
+
+                    // Estilo inline para asegurar que se vea circular y del tamaño correcto
+                    // Ajusta width/height según tu CSS original (.avatar-usuario suele ser 40px)
+                    avatarHTML = `
+                        <img src="${srcImagen}" alt="${iniciales}" 
+                             style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    `;
+                } else {
+                    // SI NO TIENE FOTO: Mostramos las iniciales (Tu código original)
+                    avatarHTML = `
+                        <div class="avatar-usuario" style="background-color: ${esAsesor ? '#1a6b8a' : '#e67e22'};">
+                            ${iniciales}
+                        </div>
+                    `;
+                }
+                // ------------------------------------
 
                 const tr = document.createElement('tr');
                 tr.setAttribute('data-nombre', nombreCompleto);
@@ -179,11 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${u.idUsuario}</td>
                     <td>
                         <div class="celda-usuario">
-                            <div class="avatar-usuario" style="background-color: ${esAsesor ? '#1a6b8a' : '#e67e22'};">
-                                ${iniciales}
-                            </div>
-                            <div style="display:flex; flex-direction:column;">
-                                <span style="font-weight:600;">${nombreCompleto}</span>
+                            ${avatarHTML}
+                            <div style="display:flex; flex-direction:column; margin-left: 10px;"> <span style="font-weight:600;">${nombreCompleto}</span>
                                 <span style="font-size:12px; color:#666;">${u.correo}</span>
                             </div>
                         </div>
@@ -195,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>
                         <div class="acciones">
                             <button class="btn-accion btn-eliminar" onclick="confirmarEliminar(${u.idUsuario}, '${nombreCompleto}')" title="Desactivar/Activar Usuario">
-                                🗑️
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                             </button>
                         </div>
                     </td>
