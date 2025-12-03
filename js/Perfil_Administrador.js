@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    
+document.addEventListener('DOMContentLoaded', async function () {
+
     // ===== CONFIGURACIÓN API =====
     const API_BASE_URL = 'http://localhost:7001';
     const usuarioId = localStorage.getItem('usuarioId');
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // ===== VARIABLES GLOBALES =====
-    let datosUsuarioOriginales = {}; 
+    let datosUsuarioOriginales = {};
     let rolUsuarioActual = 1; // Default Admin
     let seccionEditandoActual = null;
 
@@ -23,19 +23,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     const notificacion = document.getElementById('mi-notificacion');
     const mensajeNotificacion = document.getElementById('notificacion-mensaje');
     const cerrarNotificacionBtn = document.getElementById('notificacion-cerrar');
-    
+
     // Botones Editar
     const btnEditarDatos = document.getElementById('btn-editar-datos-personales');
     const btnEditarContacto = document.getElementById('btn-editar-informacion-contacto');
-    
+
     // Contenedores
     const contenedorDatos = document.getElementById('contenido-datos-personales');
     const contenedorContacto = document.getElementById('contenido-informacion-contacto');
-    
+
     // Botones de Acción
     const btnsDatos = document.getElementById('botones-datos-personales');
     const btnsContacto = document.getElementById('botones-informacion-contacto');
-    
+
     const btnGuardarDatos = document.getElementById('btn-guardar-datos-personales');
     const btnCancelarDatos = document.getElementById('btn-cancelar-datos-personales');
     const btnGuardarContacto = document.getElementById('btn-guardar-informacion-contacto');
@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     const inputFoto = document.getElementById('input-foto');
 
     if (inputFoto) {
-        inputFoto.addEventListener('change', async function() {
-            
+        inputFoto.addEventListener('change', async function () {
+
             // Validar que haya un archivo seleccionado
             if (this.files && this.files[0]) {
                 const archivo = this.files[0];
@@ -78,18 +78,18 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const response = await fetch(`${API_BASE_URL}/usuario/${usuarioId}/foto`, {
                         method: 'POST',
                         credentials: 'include', // <--- VITAL: Envía la cookie de sesión
-                        body: formData 
+                        body: formData
                         // Nota: Al usar FormData, NO agregues el header Content-Type manualmente
                     });
 
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Foto guardada en:", data.url);
-                        
+
                         // 4. Actualizar la imagen con la URL real del servidor
                         // data.url viene como "/uploads/foto.jpg", le agregamos el dominio
                         if (imgPerfil) imgPerfil.src = `${API_BASE_URL}${data.url}`;
-                        
+
                         mostrarNotificacion("Foto de perfil actualizada", 'success');
                     } else {
                         throw new Error("Error al subir la imagen al servidor");
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-     
+
 
     // ===== 1. CARGAR DATOS DEL BACKEND =====
     async function cargarPerfil() {
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             rolUsuarioActual = usuario.idRol || 1;
 
             actualizarInterfaz(usuario);
-            datosUsuarioOriginales = { ...usuario }; 
+            datosUsuarioOriginales = { ...usuario };
 
         } catch (error) {
             console.error(error);
@@ -135,26 +135,46 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function actualizarInterfaz(usuario) {
-        // Concatenar nombre completo para mostrar
         const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellido || ''} ${usuario.segundoApellido || ''}`.trim();
-        
+
         // 1. Encabezado
-        if(nombreUsuarioHeader) nombreUsuarioHeader.textContent = nombreCompleto;
-        
-        // 2. Datos Personales
+        if (nombreUsuarioHeader) nombreUsuarioHeader.textContent = nombreCompleto;
+
+        // 2. FOTO DE PERFIL (CORREGIDO)
+        if (usuario.img && usuario.img.trim() !== "") {
+            // Si img existe y no está vacía
+            if (usuario.img.startsWith('http')) {
+                // Si es una URL externa completa
+                imgPerfil.src = usuario.img;
+            } else {
+                // Si es una ruta local (/uploads/...), le pegamos el dominio
+                // Nos aseguramos de que no haya doble slash
+                const rutaLimpia = usuario.img.startsWith('/') ? usuario.img : `/${usuario.img}`;
+                imgPerfil.src = `${API_BASE_URL}${rutaLimpia}`;
+            }
+
+            // Forzar recarga visual para evitar caché del navegador (truco del timestamp)
+            // Esto ayuda si la imagen tiene el mismo nombre pero contenido nuevo
+            // imgPerfil.src += `?t=${new Date().getTime()}`; 
+        } else {
+            // Si no hay imagen, poner la default
+            imgPerfil.src = "../src/avatar-default.png"; // O tu imagen por defecto
+        }
+
+        // 3. Datos Personales
         setTexto('nombre', nombreCompleto);
         setInput('nombre', nombreCompleto);
-        
+
         setTexto('rfc', usuario.rfc || '');
         setInput('rfc', usuario.rfc || '');
 
         setTexto('curp', usuario.curp || '');
         setInput('curp', usuario.curp || '');
-        
-        // 3. Información de Contacto
+
+        // 4. Información de Contacto
         setTexto('telefono', usuario.telefono || '');
         setInput('telefono', usuario.telefono || '');
-        
+
         setTexto('email', usuario.correo || '');
         setInput('email', usuario.correo || '');
     }
@@ -170,15 +190,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // ===== 2. GUARDAR DATOS (PUT) =====
-// ===== 2. GUARDAR DATOS (PUT) - VERSIÓN DEPURADA =====
+    // ===== 2. GUARDAR DATOS (PUT) - VERSIÓN DEPURADA =====
     async function guardarCambios() {
         try {
             // 1. Obtener datos
             const nombreCompleto = document.querySelector('.input-edicion[data-campo="nombre"]').value.trim();
-            const partes = nombreCompleto.split(/\s+/); 
+            const partes = nombreCompleto.split(/\s+/);
             const nombre = partes[0] || "";
             const apellido = partes[1] || "";
-            const segundoApellido = partes.slice(2).join(" ") || ""; 
+            const segundoApellido = partes.slice(2).join(" ") || "";
 
             const payload = {
                 idUsuario: parseInt(usuarioId),
@@ -218,17 +238,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             } catch (e) {
                 // Si el servidor respondió OK pero envió texto plano (ej: "Actualizado")
                 // Creamos un objeto dummy para que el código siga
-                data = payload; 
+                data = payload;
             }
 
             mostrarNotificacion("✅ Datos actualizados correctamente", 'success');
-            
+
             // Actualizar datos locales
-            datosUsuarioOriginales = { ...datosUsuarioOriginales, ...payload }; 
-            
+            datosUsuarioOriginales = { ...datosUsuarioOriginales, ...payload };
+
             desactivarEdicion(contenedorDatos, btnsDatos, btnEditarDatos);
             desactivarEdicion(contenedorContacto, btnsContacto, btnEditarContacto);
-            
+
             actualizarInterfaz(payload);
 
         } catch (error) {
@@ -243,14 +263,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         contenedor.querySelectorAll('.valor-campo').forEach(el => el.style.display = 'none');
         contenedor.querySelectorAll('.input-edicion').forEach(el => el.style.display = 'block');
         botonesDiv.style.display = 'flex';
-        botonEditar.style.visibility = 'hidden'; 
+        botonEditar.style.visibility = 'hidden';
     }
 
     function desactivarEdicion(contenedor, botonesDiv, botonEditar) {
         contenedor.querySelectorAll('.valor-campo').forEach(el => el.style.display = 'block');
         contenedor.querySelectorAll('.input-edicion').forEach(el => el.style.display = 'none');
         botonesDiv.style.display = 'none';
-        botonEditar.style.visibility = 'visible'; 
+        botonEditar.style.visibility = 'visible';
     }
 
     function cancelarEdicionActual() {
@@ -266,38 +286,38 @@ document.addEventListener('DOMContentLoaded', async function() {
     // ===== EVENT LISTENERS =====
 
     // Editar
-    if(btnEditarDatos) btnEditarDatos.addEventListener('click', () => {
+    if (btnEditarDatos) btnEditarDatos.addEventListener('click', () => {
         seccionEditandoActual = 'datos';
         activarEdicion(contenedorDatos, btnsDatos, btnEditarDatos);
     });
 
-    if(btnEditarContacto) btnEditarContacto.addEventListener('click', () => {
+    if (btnEditarContacto) btnEditarContacto.addEventListener('click', () => {
         seccionEditandoActual = 'contacto';
         activarEdicion(contenedorContacto, btnsContacto, btnEditarContacto);
     });
 
     // Guardar
-    if(btnGuardarDatos) btnGuardarDatos.addEventListener('click', guardarCambios);
-    if(btnGuardarContacto) btnGuardarContacto.addEventListener('click', guardarCambios);
+    if (btnGuardarDatos) btnGuardarDatos.addEventListener('click', guardarCambios);
+    if (btnGuardarContacto) btnGuardarContacto.addEventListener('click', guardarCambios);
 
     // Cancelar
     function abrirModalConfirmacion() { modalConfirmacion.classList.add('activo'); }
-    if(btnCancelarDatos) btnCancelarDatos.addEventListener('click', abrirModalConfirmacion);
-    if(btnCancelarContacto) btnCancelarContacto.addEventListener('click', abrirModalConfirmacion);
+    if (btnCancelarDatos) btnCancelarDatos.addEventListener('click', abrirModalConfirmacion);
+    if (btnCancelarContacto) btnCancelarContacto.addEventListener('click', abrirModalConfirmacion);
 
     // Modal
     function cerrarModal() { modalConfirmacion.classList.remove('activo'); }
-    if(btnModalVolver) btnModalVolver.addEventListener('click', cerrarModal);
-    if(btnModalConfirmar) btnModalConfirmar.addEventListener('click', cancelarEdicionActual);
+    if (btnModalVolver) btnModalVolver.addEventListener('click', cerrarModal);
+    if (btnModalConfirmar) btnModalConfirmar.addEventListener('click', cancelarEdicionActual);
 
     // Notificaciones
     function mostrarNotificacion(msg, tipo) {
-        if(!notificacion) return alert(msg);
+        if (!notificacion) return alert(msg);
         mensajeNotificacion.textContent = msg;
         notificacion.className = `notificacion-banner ${tipo === 'error' ? 'error' : ''} mostrar`;
         setTimeout(() => { notificacion.classList.remove('mostrar'); }, 4000);
     }
-    if(cerrarNotificacionBtn) cerrarNotificacionBtn.addEventListener('click', () => notificacion.classList.remove('mostrar'));
+    if (cerrarNotificacionBtn) cerrarNotificacionBtn.addEventListener('click', () => notificacion.classList.remove('mostrar'));
 
     // Menú Hamburguesa
     const botonMenu = document.getElementById('boton-menu');
@@ -310,7 +330,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             botonMenu.classList.toggle('activo');
         });
     }
-    if(overlayMenu) {
+    if (overlayMenu) {
         overlayMenu.addEventListener('click', () => {
             menuLateral.classList.remove('abierto');
             overlayMenu.classList.remove('activo');
