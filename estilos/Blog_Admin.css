@@ -78,10 +78,11 @@ body {
 }
 
 /* ===== MENÚ LATERAL ===== */
+/* Menú lateral - Siempre visible en desktop */
 .menu-lateral {
     width: 260px;
-    background: linear-gradient(135deg, #0a5c7a 0%, #1a8caa 100%);
-    padding: 20px 0;
+    background: #0a5c7a;
+    padding: 0;
     position: fixed;
     height: 100vh;
     overflow-y: auto;
@@ -89,7 +90,6 @@ body {
     transform: translateX(0);
     transition: transform 0.3s ease;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    /* --- CORRECCIÓN 1 --- */
     display: flex;
     flex-direction: column;
 }
@@ -98,12 +98,49 @@ body {
     transform: translateX(0);
 }
 
+/* Contenedor del logo */
+.contenedor-logo {
+    background: #0a5c7a;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-empresa {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.imagen-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.nombre-empresa {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
 .contenedor-menu {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    /* --- CORRECCIÓN 2 --- */
-    flex: 1; /* Esto empuja el botón de logout hacia abajo */
+    flex: 1;
+    padding: 20px 0;
 }
 
 .item-menu {
@@ -113,7 +150,7 @@ body {
     padding: 12px 20px;
     color: white;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 15px;
     transition: background-color 0.3s ease;
 }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../estilos/Perfil_Administrador.css">
     <script src="../js/Perfil_Administrador.js" defer></script>
 </head>
+
 <body>
     <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
         <span class="linea-hamburguesa"></span>
@@ -16,41 +18,41 @@
 
     <div class="overlay-menu" id="overlay-menu"></div>
 
-        <aside class="menu-lateral" id="menu-lateral">
+    <aside class="menu-lateral" id="menu-lateral">
         <div class="contenedor-logo">
             <div class="logo-empresa">
                 <img src="../src/Logo_Sin_Fondo.png" alt="Logo AFGCORPORACIÓN" class="imagen-logo">
             </div>
             <div class="nombre-empresa">AFGCORPORACIÓN</div>
         </div>
-        
+
         <div class="contenedor-menu">
-            
+
             <a href="../paginas/Perfil_Administrador.html" class="item-menu activo">
                 <img src="../src/Perfil.png" alt="Perfil" class="icono-menu">
                 <span>Perfil</span>
             </a>
-            
+
             <a href="../paginas/Control_Usarios.html" class="item-menu">
                 <img src="../src/Contadores.png" alt="Usuarios" class="icono-menu">
                 <span>Control de usuarios</span>
             </a>
-            
+
             <a href="../paginas/Blog_Admin.html" class="item-menu">
                 <img src="../src/Talleres.png" alt="Blog" class="icono-menu">
                 <span>Blog</span>
             </a>
-            
+
             <a href="../paginas/Gestor_Pagos.html" class="item-menu">
                 <img src="../src/Pagos.png" alt="Pagos" class="icono-menu">
                 <span>Gestor de pagos</span>
             </a>
-            
+
             <a href="../paginas/Control_Solicitudes.html" class="item-menu">
                 <img src="../src/Solicitudes.png" alt="Solicitudes" class="icono-menu">
                 <span>Control de solicitudes</span>
             </a>
-            
+
             <a href="../paginas/Historial_Asesorias.html" class="item-menu">
                 <img src="../src/Historial.png" alt="Historial" class="icono-menu">
                 <span>Historial de asesorías</span>
@@ -84,7 +86,7 @@
                         <input type="file" id="input-foto" accept="image/*" style="display: none;">
                     </div>
                 </div>
-                
+
                 <div class="info-basica">
                     <h3 class="nombre-usuario">Cargando...</h3>
                     <p class="rol-usuario">Administrador</p>
@@ -126,7 +128,7 @@
         </section>
 
         <section class="seccion-informacion">
-            
+
             <div class="columna-info">
                 <div class="encabezado-columna">
                     <h3 class="titulo-columna">Datos Personales</h3>
@@ -134,7 +136,7 @@
                         <img src="../src/Editar.png" alt="Editar" class="icono-editar-btn">
                     </button>
                 </div>
-                
+
                 <div class="contenido-columna" id="contenido-datos-personales">
                     <div class="campo-info">
                         <img src="../src/Nombre.png" alt="Nombre" class="icono-campo">
@@ -161,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="contenedor-botones" id="botones-datos-personales" style="display: none;">
                     <button class="boton-cancelar" id="btn-cancelar-datos-personales">Cancelar</button>
                     <button class="boton-guardar" id="btn-guardar-datos-personales">Guardar cambios</button>
@@ -175,7 +177,7 @@
                         <img src="../src/Editar.png" alt="Editar" class="icono-editar-btn">
                     </button>
                 </div>
-                
+
                 <div class="contenido-columna" id="contenido-informacion-contacto">
                     <div class="campo-info">
                         <img src="../src/Telefono.png" alt="Teléfono" class="icono-campo">
@@ -194,7 +196,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="contenedor-botones" id="botones-informacion-contacto" style="display: none;">
                     <button class="boton-cancelar" id="btn-cancelar-informacion-contacto">Cancelar</button>
                     <button class="boton-guardar" id="btn-guardar-informacion-contacto">Guardar cambios</button>
@@ -214,4 +216,5 @@
         </div>
     </main>
 </body>
+
 </html>
