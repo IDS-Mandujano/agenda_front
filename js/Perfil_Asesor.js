@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // ===== CONFIGURACIÓN API =====
     const API_BASE_URL = 'http://localhost:7001';
+    
+    // ===== VERIFICACIÓN DE SESIÓN (TOKEN MANUAL) =====
     const usuarioId = localStorage.getItem('usuarioId');
     const token = localStorage.getItem('token');
 
@@ -12,9 +14,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ===== ELEMENTOS DOM =====
     const nombreCompletoEl = document.getElementById('nombre-completo');
-    const inicialesAvatar = document.getElementById('iniciales-avatar');
     
-    // Botones
+    // Foto
+    const imgPerfil = document.getElementById('foto-perfil');
+    const inicialesAvatar = document.getElementById('iniciales-avatar');
+    const btnCambiarFoto = document.getElementById('boton-cambiar-foto');
+    const inputFoto = document.getElementById('input-foto');
+
+    // Botones Edición
     const btnEditar = document.getElementById('btn-editar');
     const btnGuardar = document.getElementById('btn-guardar-cambios');
     const btnCancelar = document.getElementById('btn-cancelar-edicion');
@@ -23,11 +30,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Modales y Alertas
     const modalConfirmar = document.getElementById('modal-confirmar-guardar');
+    const modalCancelar = document.getElementById('modal-cancelar');
     const btnAceptarModal = document.getElementById('btn-aceptar-modal');
     const btnCancelarModal = document.getElementById('btn-cancelar-modal');
+    const btnVolver = document.getElementById('btn-volver');
+    const btnSiCancelar = document.getElementById('btn-si-cancelar');
     const alertaExito = document.getElementById('alerta-exito');
+    const cerrarAlerta = document.getElementById('cerrar-alerta');
 
-    // Mapeo de Campos (Solo los que existen en tu Backend)
+    // Campos
     const camposUI = {
         nombre: { display: document.getElementById('display-nombre'), input: document.getElementById('input-nombre') },
         curp:   { display: document.getElementById('display-curp'),   input: document.getElementById('input-curp') },
@@ -36,42 +47,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     // Estado
-    let datosUsuarioOriginales = {}; // Para guardar correo, rol y contraseña que no se editan aquí
+    let datosUsuarioOriginales = {}; 
 
     // ===== INICIALIZACIÓN =====
-    await cargarPerfil();
     setupEventListeners();
+    await cargarPerfil();
 
     // ===== 1. CARGAR DATOS =====
     async function cargarPerfil() {
         try {
             const res = await fetch(`${API_BASE_URL}/perfil/${usuarioId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                method: 'GET',
+                // VOLVEMOS A TU FORMATO ORIGINAL
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                }
             });
             
-            if (!res.ok) throw new Error("Error cargando perfil");
+            if (!res.ok) throw new Error("Error cargando perfil (401/403/500)");
             
             const usuario = await res.json();
-            console.log("Datos recibidos:", usuario);
-            
-            // Guardamos todo el objeto para no perder datos al guardar (como el correo)
             datosUsuarioOriginales = usuario;
 
-            // Preparar visualización
+            // Renderizar Textos
             const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellido || ''} ${usuario.segundoApellido || ''}`.trim();
-            
-            // Actualizar Encabezado
             if (nombreCompletoEl) nombreCompletoEl.textContent = nombreCompleto;
-            if (inicialesAvatar) inicialesAvatar.textContent = getIniciales(usuario.nombre, usuario.apellido);
+            
+            // Renderizar Foto
+            if (usuario.img) {
+                inicialesAvatar.style.display = 'none';
+                imgPerfil.style.display = 'block';
+                if (usuario.img.startsWith('http')) {
+                    imgPerfil.src = usuario.img;
+                } else {
+                    imgPerfil.src = `${API_BASE_URL}${usuario.img}`;
+                }
+            } else {
+                inicialesAvatar.style.display = 'flex';
+                imgPerfil.style.display = 'none';
+                inicialesAvatar.textContent = getIniciales(usuario.nombre, usuario.apellido);
+            }
 
-            // Actualizar Campos Específicos
+            // Llenar Campos
             actualizarCampo('nombre', nombreCompleto);
             actualizarCampo('curp', usuario.curp);
             actualizarCampo('rfc', usuario.rfc);
             actualizarCampo('tel', usuario.telefono);
 
         } catch (e) {
-            console.error(e);
+            console.error("Error en cargarPerfil:", e);
         }
     }
 
@@ -83,50 +108,97 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // ===== 2. GUARDAR DATOS =====
+    // ===== 2. SUBIR FOTO (CONECTADO CON TOKEN) =====
+    if (btnCambiarFoto && inputFoto) {
+        btnCambiarFoto.addEventListener('click', () => inputFoto.click());
+
+        inputFoto.addEventListener('change', async function() {
+            if (this.files && this.files[0]) {
+                const archivo = this.files[0];
+
+                if (archivo.size > 5 * 1024 * 1024) {
+                    alert("La imagen es muy pesada (Máx 5MB)");
+                    return;
+                }
+
+                // Previsualización
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imgPerfil.src = e.target.result;
+                    imgPerfil.style.display = 'block';
+                    inicialesAvatar.style.display = 'none';
+                };
+                reader.readAsDataURL(archivo);
+
+                // Enviar
+                const formData = new FormData();
+                formData.append("imagen", archivo);
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/usuario/${usuarioId}/foto`, {
+                        method: 'POST',
+                        // IMPORTANTE: Aquí solo mandamos Authorization.
+                        // NO mandamos 'Content-Type': 'application/json' ni 'multipart/form-data'
+                        // El navegador pone el boundary automáticamente al ver FormData.
+                        headers: { 
+                            'Authorization': `Bearer ${token}` 
+                        },
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Actualizar con la URL real del servidor
+                        imgPerfil.src = `${API_BASE_URL}${data.url}`;
+                        mostrarAlerta("Foto actualizada");
+                    } else {
+                        throw new Error("Error al subir foto");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("Error al guardar la foto");
+                }
+            }
+        });
+    }
+
+    // ===== 3. GUARDAR DATOS (CON TOKEN) =====
     async function guardarCambios() {
         try {
-            // 1. Obtener nombre completo del input
             const nombreCompleto = camposUI.nombre.input.value.trim();
             const partes = nombreCompleto.split(/\s+/);
-            
             const nombre = partes[0] || "";
             const apellido = partes[1] || "";
             const segundoApellido = partes.slice(2).join(" ") || ""; 
 
-            // 2. Construir Payload (Combinando datos nuevos con los originales obligatorios)
             const payload = {
                 idUsuario: parseInt(usuarioId),
                 nombre: nombre,
                 apellido: apellido,
                 segundoApellido: segundoApellido,
-                
                 rfc: camposUI.rfc.input.value.trim(),
                 curp: camposUI.curp.input.value.trim(),
                 telefono: camposUI.tel.input.value.trim(),
-                
-                // Datos que NO se editan en este form pero son obligatorios en el Backend
                 correo: datosUsuarioOriginales.correo, 
                 idRol: datosUsuarioOriginales.idRol,
                 estado: datosUsuarioOriginales.estado || 'activo'
             };
 
-            console.log("Enviando:", payload);
-
             const res = await fetch(`${API_BASE_URL}/perfil/${usuarioId}`, {
                 method: 'PUT',
+                // VOLVEMOS A TU FORMATO ORIGINAL
                 headers: { 
-                    'Content-Type': 'application/json', 
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify(payload)
             });
 
             if (res.ok) {
-                mostrarAlerta();
+                mostrarAlerta("Datos actualizados correctamente");
                 modoEdicion(false);
                 modalConfirmar.classList.remove('activo');
-                cargarPerfil(); // Recargar para confirmar cambios
+                cargarPerfil(); 
             } else {
                 alert("Error al actualizar perfil");
             }
@@ -134,12 +206,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (e) { console.error(e); }
     }
 
-    // ===== 3. LÓGICA UI =====
+    // ===== 4. LÓGICA UI =====
     function modoEdicion(activo) {
         const displayMode = activo ? 'none' : 'block';
         const inputMode = activo ? 'block' : 'none';
 
-        // Solo alternamos los campos que estamos controlando
         Object.values(camposUI).forEach(campo => {
             if (campo.display) campo.display.style.display = displayMode;
             if (campo.input) campo.input.style.display = inputMode;
@@ -149,9 +220,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         contenedorBotonesEdicion.style.display = activo ? 'flex' : 'none';
     }
 
-    function mostrarAlerta() {
-        alertaExito.classList.add('mostrar');
-        setTimeout(() => alertaExito.classList.remove('mostrar'), 4000);
+    function mostrarAlerta(msg) {
+        if(alertaExito) {
+            alertaExito.querySelector('.alerta-titulo').textContent = msg || 'Se actualizaron tus datos';
+            alertaExito.classList.add('mostrar');
+            setTimeout(() => alertaExito.classList.remove('mostrar'), 4000);
+        }
     }
 
     function getIniciales(nom, ape) {
@@ -164,10 +238,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setupEventListeners() {
         // Botones Edición
         btnEditar.addEventListener('click', () => modoEdicion(true));
-        
-        btnCancelar.addEventListener('click', () => {
+        btnCancelar.addEventListener('click', () => modalCancelar.classList.add('activo'));
+
+        // Modales
+        btnGuardar.addEventListener('click', () => modalConfirmar.classList.add('activo'));
+        btnAceptarModal.addEventListener('click', guardarCambios);
+        btnCancelarModal.addEventListener('click', () => modalConfirmar.classList.remove('activo'));
+
+        btnVolver.addEventListener('click', () => modalCancelar.classList.remove('activo'));
+        btnSiCancelar.addEventListener('click', () => {
             modoEdicion(false);
-            // Restaurar valores visuales al cancelar
+            modalCancelar.classList.remove('activo');
+            // Restaurar datos visuales
             const u = datosUsuarioOriginales;
             const nombreC = `${u.nombre} ${u.apellido} ${u.segundoApellido}`.trim();
             actualizarCampo('nombre', nombreC);
@@ -176,28 +258,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             actualizarCampo('tel', u.telefono);
         });
 
-        // Guardar
-        btnGuardar.addEventListener('click', () => modalConfirmar.classList.add('activo'));
-        
-        // Modal Confirmación
-        btnCancelarModal.addEventListener('click', () => modalConfirmar.classList.remove('activo'));
-        btnAceptarModal.addEventListener('click', guardarCambios);
+        if(cerrarAlerta) cerrarAlerta.addEventListener('click', () => alertaExito.classList.remove('mostrar'));
 
-        // Menú Hamburguesa
-        const botonHamburguesa = document.getElementById('boton-hamburguesa');
+        // Menú
+        const botonMenu = document.getElementById('boton-hamburguesa');
         const menuLateral = document.getElementById('menu-lateral');
         const overlayMenu = document.getElementById('overlay-menu');
         
-        if(botonHamburguesa) botonHamburguesa.addEventListener('click', () => {
-            menuLateral.classList.toggle('abierto');
-            overlayMenu.classList.toggle('activo');
-            botonHamburguesa.classList.toggle('activo');
-        });
-        if(overlayMenu) overlayMenu.addEventListener('click', () => {
-            menuLateral.classList.remove('abierto');
-            overlayMenu.classList.remove('activo');
-            botonHamburguesa.classList.remove('activo');
-        });
+        if(botonMenu) {
+            botonMenu.addEventListener('click', () => {
+                menuLateral.classList.toggle('abierto');
+                overlayMenu.classList.toggle('activo');
+                botonMenu.classList.toggle('activo');
+            });
+        }
+        if(overlayMenu) {
+            overlayMenu.addEventListener('click', () => {
+                menuLateral.classList.remove('abierto');
+                overlayMenu.classList.remove('activo');
+                botonMenu.classList.remove('activo');
+            });
+        }
         
         // Logout
         const btnLogout = document.getElementById('logout-button');

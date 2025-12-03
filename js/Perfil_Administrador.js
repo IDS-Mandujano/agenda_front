@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // ===== VARIABLES GLOBALES =====
     let datosUsuarioOriginales = {}; 
     let rolUsuarioActual = 1; // Default Admin
+    let seccionEditandoActual = null;
 
     // ===== ELEMENTOS DEL DOM =====
     const nombreUsuarioHeader = document.querySelector('.nombre-usuario');
@@ -44,7 +45,66 @@ document.addEventListener('DOMContentLoaded', async function() {
     const modalConfirmacion = document.getElementById('modal-confirmacion');
     const btnModalVolver = document.getElementById('btn-volver');
     const btnModalConfirmar = document.getElementById('btn-confirmar-cancelar');
-    let seccionEditandoActual = null; 
+
+    const imgPerfil = document.getElementById('imagen-perfil');
+    const inputFoto = document.getElementById('input-foto');
+
+    if (inputFoto) {
+        inputFoto.addEventListener('change', async function() {
+            
+            // Validar que haya un archivo seleccionado
+            if (this.files && this.files[0]) {
+                const archivo = this.files[0];
+
+                // (Opcional) Validar tamaño (Máx 5MB)
+                if (archivo.size > 5 * 1024 * 1024) {
+                    alert("La imagen es muy pesada (Máx 5MB)");
+                    return;
+                }
+
+                // 2. Previsualización inmediata (UX)
+                // Muestra la foto antes de subirla para que se sienta rápido
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (imgPerfil) imgPerfil.src = e.target.result;
+                };
+                reader.readAsDataURL(archivo);
+
+                // 3. Preparar el envío al Backend
+                const formData = new FormData();
+                formData.append("imagen", archivo); // "imagen" debe coincidir con el backend
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/usuario/${usuarioId}/foto`, {
+                        method: 'POST',
+                        credentials: 'include', // <--- VITAL: Envía la cookie de sesión
+                        body: formData 
+                        // Nota: Al usar FormData, NO agregues el header Content-Type manualmente
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Foto guardada en:", data.url);
+                        
+                        // 4. Actualizar la imagen con la URL real del servidor
+                        // data.url viene como "/uploads/foto.jpg", le agregamos el dominio
+                        if (imgPerfil) imgPerfil.src = `${API_BASE_URL}${data.url}`;
+                        
+                        mostrarNotificacion("Foto de perfil actualizada", 'success');
+                    } else {
+                        throw new Error("Error al subir la imagen al servidor");
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    mostrarNotificacion("No se pudo guardar la foto", 'error');
+                    // Opcional: Recargar la página o revertir la imagen si falla
+                }
+            }
+        });
+    }
+
+     
 
     // ===== 1. CARGAR DATOS DEL BACKEND =====
     async function cargarPerfil() {

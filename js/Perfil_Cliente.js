@@ -1,36 +1,51 @@
 document.addEventListener('DOMContentLoaded', async function() {
     
-    // ===== VERIFICACIÓN DE SESIÓN =====
-    const token = localStorage.getItem('token');
+    // ===== CONFIGURACIÓN API =====
+    const API_BASE_URL = 'http://localhost:7001';
     const usuarioId = localStorage.getItem('usuarioId');
+    const token = localStorage.getItem('token');
 
+    // ===== VERIFICACIÓN DE SESIÓN =====
     if (!token || !usuarioId) {
-        alert('No has iniciado sesión.');
+        // alert('No has iniciado sesión.');
         window.location.href = '../paginas/Rol_Usuario.html'; 
         return;
     }
 
+    // ===== VARIABLES GLOBALES =====
+    let datosUsuarioOriginales = {}; 
+    let rolUsuarioActual = 2; // Default Cliente
+
     // ===== ELEMENTOS DEL DOM =====
+    const nombreUsuarioHeader = document.getElementById('nombre-usuario');
+    const imgPerfil = document.getElementById('imagen-perfil');
+    
+    // Botones Fotos
+    const btnCambiarFoto = document.getElementById('btn-cambiar-foto');
+    // Creamos dinámicamente el input si no existe en el HTML para evitar errores
+    let inputFoto = document.getElementById('input-foto');
+    if (!inputFoto) {
+        inputFoto = document.createElement('input');
+        inputFoto.type = 'file';
+        inputFoto.id = 'input-foto';
+        inputFoto.accept = 'image/*';
+        inputFoto.style.display = 'none';
+        document.body.appendChild(inputFoto);
+    }
+
+    // Botones Editar
     const btnActualizarDatos = document.getElementById('btn-actualizar-datos');
     const btnCancelar = document.getElementById('btn-cancelar');
     const btnGuardar = document.getElementById('btn-guardar');
     const contenedorBotones = document.getElementById('contenedor-botones');
     
-    // Menú hamburguesa 
-    const botonHamburguesa = document.getElementById('boton-hamburguesa');
-    const menuLateral = document.getElementById('menu-lateral');
-    const overlayMenu = document.getElementById('overlay-menu');
-    const btnLogout = document.getElementById('logout-button');
-    
-    // Campos del formulario (SOLO LOS QUE USAS)
+    // Campos del formulario
     const camposEntrada = document.querySelectorAll('.campo-entrada');
     const nombreCompletoInput = document.getElementById('nombre-completo');
     const rfcInput = document.getElementById('rfc');
     const curpInput = document.getElementById('curp');
     const telefonoInput = document.getElementById('telefono');
     const emailInput = document.getElementById('email');
-    
-    // --- SE ELIMINARON LOS CAMPOS DE DIRECCIÓN QUE CAUSABAN EL ERROR ---
     
     // Modales
     const modalCancelar = document.getElementById('modal-cancelar');
@@ -46,59 +61,112 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Estado del formulario
     let modoEdicion = false;
-    let datosOriginales = {}; 
-    let rolUsuarioActual = 2; 
 
-    // ===== FUNCIONES DE API =====
-
-    /**
-     * Carga los datos del usuario desde el servidor
-     */
+    // ===== 1. CARGAR DATOS DEL BACKEND =====
     async function cargarDatosDelServidor() {
         try {
-            const usuario = await ApiService.get(`/perfil/${usuarioId}`);
+            const usuario = await ApiServiceGet(`/perfil/${usuarioId}`);
             
             console.log('Datos recibidos:', usuario);
 
-            if (usuario.idRol) {
-                rolUsuarioActual = usuario.idRol;
-            }
+            if (usuario.idRol) rolUsuarioActual = usuario.idRol;
+            datosUsuarioOriginales = usuario;
 
-            // 1. Construir Nombre Completo
+            // 1. Nombre Completo
             const nombreCompletoStr = `${usuario.nombre || ''} ${usuario.apellido || ''} ${usuario.segundoApellido || ''}`.trim();
 
             // 2. Llenar inputs
-            // Nota: El log muestra que RFC y CURP ya llegan bien, pero mantenemos el || '' por seguridad.
             if(nombreCompletoInput) nombreCompletoInput.value = nombreCompletoStr;
             if(emailInput) emailInput.value = usuario.correo || '';
             if(rfcInput) rfcInput.value = usuario.rfc || '';
             if(curpInput) curpInput.value = usuario.curp || '';
             if(telefonoInput) telefonoInput.value = usuario.telefono || '';
 
-            // Actualizar encabezado si existe
-            const nombreHeader = document.getElementById('nombre-usuario');
-            if (nombreHeader) nombreHeader.textContent = nombreCompletoStr || 'Usuario';
+            // 3. Encabezado
+            if (nombreUsuarioHeader) nombreUsuarioHeader.textContent = nombreCompletoStr || 'Usuario';
 
-            // Guardamos respaldo
-            guardarDatosOriginales();
+            // 4. FOTO DE PERFIL (NUEVO)
+            if (usuario.img && imgPerfil) {
+                if (usuario.img.startsWith('http')) {
+                    imgPerfil.src = usuario.img;
+                } else {
+                    imgPerfil.src = `${API_BASE_URL}${usuario.img}`;
+                }
+            }
 
         } catch (error) {
             console.error('Error al cargar perfil:', error);
         }
     }
 
-    /**
-     * Envía los datos actualizados al servidor
-     */
+    // Función Helper para GET con Token
+    async function ApiServiceGet(endpoint) {
+        const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+            method: 'GET',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+        if (!res.ok) throw new Error("Error en petición GET");
+        return await res.json();
+    }
+
+    // ===== 2. SUBIR FOTO (NUEVO) =====
+    if (btnCambiarFoto) {
+        btnCambiarFoto.addEventListener('click', () => inputFoto.click());
+    }
+
+    if (inputFoto) {
+        inputFoto.addEventListener('change', async function() {
+            if (this.files && this.files[0]) {
+                const archivo = this.files[0];
+
+                if (archivo.size > 5 * 1024 * 1024) {
+                    alert("La imagen es muy pesada (Máx 5MB)");
+                    return;
+                }
+
+                // Previsualización
+                const reader = new FileReader();
+                reader.onload = (e) => { if(imgPerfil) imgPerfil.src = e.target.result; };
+                reader.readAsDataURL(archivo);
+
+                // Enviar
+                const formData = new FormData();
+                formData.append("imagen", archivo);
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/usuario/${usuarioId}/foto`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Actualizar con URL del servidor
+                        if(imgPerfil) imgPerfil.src = `${API_BASE_URL}${data.url}`;
+                        alert("Foto actualizada correctamente");
+                    } else {
+                        throw new Error("Error al subir foto");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("No se pudo guardar la foto");
+                }
+            }
+        });
+    }
+
+    // ===== 3. GUARDAR DATOS (PUT) =====
     async function guardarDatosEnServidor() {
         try {
-            // 1. Descomponer el nombre completo
             const partesNombre = nombreCompletoInput.value.trim().split(/\s+/);
             const nombre = partesNombre[0] || '';
             const apellido = partesNombre[1] || '';
             const segundoApellido = partesNombre.slice(2).join(' ') || '';
 
-            // 2. Preparar objeto JSON (SIN DIRECCIÓN)
             const datosAEnviar = {
                 idUsuario: parseInt(usuarioId),
                 nombre: nombre,
@@ -111,110 +179,83 @@ document.addEventListener('DOMContentLoaded', async function() {
                 idRol: rolUsuarioActual
             };
 
-            console.log("Enviando al servidor:", datosAEnviar);
-
-            // 3. Llamada PUT al backend
-            const respuesta = await ApiService.put(`/perfil/${usuarioId}`, datosAEnviar);
+            const response = await fetch(`${API_BASE_URL}/perfil/${usuarioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(datosAEnviar)
+            });
             
-            console.log('Respuesta actualización:', respuesta);
+            if (!response.ok) throw new Error("Error al actualizar");
             
             mostrarExito();
 
         } catch (error) {
             console.error('Error al actualizar:', error);
-            alert('Error al guardar cambios: ' + error.message);
+            alert('Error al guardar cambios.');
             cerrarModal(modalGuardar);
         }
     }
 
+    // ===== LÓGICA DE UI =====
     function mostrarExito() {
         desactivarModoEdicion();
         cerrarModal(modalGuardar);
-        guardarDatosOriginales();
-
-        setTimeout(() => {
-            abrirModal(modalExito);
-        }, 300);
-    }
-
-    // ===== LÓGICA DE UI (VISUAL) =====
-    function guardarDatosOriginales() {
-        datosOriginales = {
-            nombreCompleto: nombreCompletoInput ? nombreCompletoInput.value : '',
-            rfc: rfcInput ? rfcInput.value : '',
-            curp: curpInput ? curpInput.value : '',
-            telefono: telefonoInput ? telefonoInput.value : '',
-            email: emailInput ? emailInput.value : ''
-        };
+        setTimeout(() => { abrirModal(modalExito); }, 300);
     }
 
     function restaurarDatosOriginales() {
-        if(nombreCompletoInput) nombreCompletoInput.value = datosOriginales.nombreCompleto || '';
-        if(rfcInput) rfcInput.value = datosOriginales.rfc || '';
-        if(curpInput) curpInput.value = datosOriginales.curp || '';
-        if(telefonoInput) telefonoInput.value = datosOriginales.telefono || '';
-        if(emailInput) emailInput.value = datosOriginales.email || '';
+        // Recargar desde el objeto guardado o volver a pedir al servidor
+        cargarDatosDelServidor(); 
     }
 
     function activarModoEdicion() {
         modoEdicion = true;
-        guardarDatosOriginales(); 
-        
         camposEntrada.forEach(campo => {
-            campo.disabled = false;
+            // El correo y otros campos sensibles podrían seguir bloqueados si quieres
+            if(campo.id !== 'email') campo.disabled = false;
         });
-        
         contenedorBotones.style.display = 'flex';
-        
-        btnActualizarDatos.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> Editando...`;
-        btnActualizarDatos.style.backgroundColor = '#fef3c7';
-        btnActualizarDatos.style.color = '#92400e';
+        btnActualizarDatos.style.display = 'none'; // Ocultar botón de editar
     }
 
     function desactivarModoEdicion() {
         modoEdicion = false;
-        
         camposEntrada.forEach(campo => campo.disabled = true);
         contenedorBotones.style.display = 'none';
-        
-        btnActualizarDatos.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg> Actualizar datos`;
-        btnActualizarDatos.style.backgroundColor = 'white';
-        btnActualizarDatos.style.color = '#117a8b';
+        btnActualizarDatos.style.display = 'flex'; // Mostrar botón de editar
     }
 
     // ===== MENÚ HAMBURGUESA =====
-    function abrirMenu() {
-        if(menuLateral) menuLateral.classList.add('abierto');
-        if(overlayMenu) overlayMenu.classList.add('activo');
-        if(botonHamburguesa) botonHamburguesa.classList.add('activo');
-        document.body.style.overflow = 'hidden';
+    const botonHamburguesa = document.getElementById('boton-hamburguesa');
+    const menuLateral = document.getElementById('menu-lateral');
+    const overlayMenu = document.getElementById('overlay-menu');
+    const btnLogout = document.getElementById('logout-button');
+
+    function toggleMenu() {
+        if(menuLateral) {
+            menuLateral.classList.toggle('abierto');
+            overlayMenu.classList.toggle('activo');
+            botonHamburguesa.classList.toggle('activo');
+        }
     }
 
-    function cerrarMenu() {
-        if(menuLateral) menuLateral.classList.remove('abierto');
-        if(overlayMenu) overlayMenu.classList.remove('activo');
-        if(botonHamburguesa) botonHamburguesa.classList.remove('activo');
-        document.body.style.overflow = '';
-    }
+    if (botonHamburguesa) botonHamburguesa.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+    if (overlayMenu) overlayMenu.addEventListener('click', toggleMenu);
 
-    if (botonHamburguesa) {
-        botonHamburguesa.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuLateral.classList.contains('abierto') ? cerrarMenu() : abrirMenu();
+    if (btnLogout) {
+        btnLogout.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('¿Cerrar sesión?')) {
+                localStorage.clear();
+                window.location.href = '../paginas/Rol_Usuario.html';
+            }
         });
     }
 
-    if (overlayMenu) overlayMenu.addEventListener('click', cerrarMenu);
-
-    // ===== EVENT LISTENERS =====
-
+    // ===== EVENT LISTENERS FORMULARIO =====
     if (btnActualizarDatos) btnActualizarDatos.addEventListener('click', () => {
         if (!modoEdicion) activarModoEdicion();
     });
@@ -223,7 +264,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Modal Cancelar
     if (btnVolver) btnVolver.addEventListener('click', () => cerrarModal(modalCancelar));
-
     if (btnConfirmarCancelar) btnConfirmarCancelar.addEventListener('click', () => {
         restaurarDatosOriginales();
         desactivarModoEdicion();
@@ -231,32 +271,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     // Guardar
-    if (btnGuardar) btnGuardar.addEventListener('click', () => {
-        abrirModal(modalGuardar);
-    });
+    if (btnGuardar) btnGuardar.addEventListener('click', () => abrirModal(modalGuardar));
 
     // Modal Guardar Confirmación
     if (btnRegresar) btnRegresar.addEventListener('click', () => cerrarModal(modalGuardar));
-
     if (btnConfirmarGuardar) btnConfirmarGuardar.addEventListener('click', () => {
         guardarDatosEnServidor();
     });
 
     // Modal Éxito
     if (btnCerrarExito) btnCerrarExito.addEventListener('click', () => cerrarModal(modalExito));
-
-    // Logout
-    if (btnLogout) {
-        btnLogout.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('¿Estás seguro de que deseas cerrar la sesión?')) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('usuarioId');
-                localStorage.removeItem('usuarioRol');
-                window.location.href = '../paginas/Rol_Usuario.html';
-            }
-        });
-    }
 
     // Modales Generales
     function abrirModal(modal) {
@@ -271,14 +295,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.body.style.overflow = '';
     }
     
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            [modalCancelar, modalGuardar, modalExito].forEach(m => cerrarModal(m));
-        }
-    });
-
     // ===== INICIALIZACIÓN =====
     await cargarDatosDelServidor();
-
-    console.log('✅ Perfil cargado y conectado al backend');
+    console.log('✅ Perfil Cliente Iniciado');
 });
