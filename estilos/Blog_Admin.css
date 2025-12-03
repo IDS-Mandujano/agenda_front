@@ -699,12 +699,16 @@ body {
 
 /* Área de subir imagen */
 .area-subir-imagen {
-    border: 2px dashed #d1d5db;
-    border-radius: 8px;
-    padding: 30px;
-    text-align: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    width: 100%;
+    height: 250px; /* Altura fija */
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* CRUCIAL: Corta lo que sobresale */
+    position: relative;
+    background-color: #f9fafb;
 }
 
 .area-subir-imagen:hover {
@@ -732,9 +736,18 @@ body {
 }
 
 .preview-imagen {
-    position: relative;
     width: 100%;
-    max-height: 200px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#imagen-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* CRUCIAL: Llena el espacio sin deformar */
+    display: block;
 }
 
 .preview-imagen img {
@@ -1311,4 +1324,27 @@ body {
 /* Un estilo rojo también para el icono del logout al pasar el mouse */
 .item-logout:hover .icono-menu {
     filter: brightness(0) saturate(100%) invert(75%) sepia(30%) saturate(6000%) hue-rotate(315deg) brightness(100%) contrast(95%);
+}
+
+.modal-detalles .header-detalle-publicacion {
+    width: 100%;
+    height: 300px; /* Altura fija para el encabezado */
+    overflow: hidden; /* CRUCIAL */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    position: relative;
+    background-color: #e5e7eb;
+}
+
+.modal-detalles .header-detalle-publicacion img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Hace que se vea bonita y centrada */
+    display: block;
+}
+
+/* Asegurar que el modal no se salga de la pantalla verticalmente */
+.modal-detalles {
+    max-height: 90vh; /* Máximo 90% del alto de pantalla */
+    overflow-y: auto; /* Scroll interno si es muy largo */
 }

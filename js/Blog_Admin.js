@@ -1,416 +1,156 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // ===== CONSTANTES Y VARIABLES GLOBALES =====
-    const STORAGE_KEY = 'afgcorporacion_blog';
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ===== CONFIGURACIÓN API =====
+    const API_BASE_URL = 'http://localhost:7001';
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '../paginas/Rol_Usuario.html';
+        return;
+    }
+
+    // ===== VARIABLES DE ESTADO =====
     let publicaciones = [];
     let publicacionEditando = null;
-    let tarjetaAEliminar = null;
-    let imagenSeleccionada = null;
+    let tarjetaAEliminar = null; // Usamos tu nombre de variable original
 
-    // ===== PUBLICACIONES DE EJEMPLO =====
-    const publicacionesEjemplo = [
-        {
-            id: 1,
-            titulo: "Nuevas Reformas Fiscales 2025",
-            contenido: "Se han anunciado importantes cambios en la legislación fiscal para el año 2025. Entre los principales cambios destacan: nuevas tasas impositivas para personas físicas con ingresos superiores a los $3 millones de pesos anuales, modificaciones en las deducciones personales permitidas, y actualización de los topes máximos deducibles para gastos médicos y educativos.\n\nEstas reformas buscan modernizar el sistema tributario mexicano y hacerlo más equitativo. Se recomienda a todos los contribuyentes revisar su situación fiscal actual y consultar con un contador para optimizar su carga tributaria de manera legal.\n\nLos cambios entrarán en vigor el 1 de enero de 2025, por lo que aún hay tiempo para realizar la planeación fiscal adecuada.",
-            categoria: "Fiscal",
-            fecha: "2025-01-15",
-            destacado: true,
-            imagen: null,
-            fechaCreacion: "2025-01-15T10:00:00.000Z"
-        },
-        {
-            id: 2,
-            titulo: "Tips para Optimizar tu Contabilidad",
-            contenido: "Una buena gestión contable es fundamental para el éxito de cualquier negocio. Aquí te compartimos algunos tips esenciales:\n\n1. Mantén tus registros actualizados diariamente\n2. Separa tus finanzas personales de las empresariales\n3. Utiliza software contable especializado\n4. Guarda todos tus comprobantes fiscales\n5. Realiza conciliaciones bancarias mensuales\n6. Consulta regularmente con tu contador\n\nImplementar estos hábitos te ayudará a tener un mejor control financiero y evitar problemas con el SAT.",
-            categoria: "Tips",
-            fecha: "2025-01-14",
-            destacado: true,
-            imagen: null,
-            fechaCreacion: "2025-01-14T10:00:00.000Z"
-        },
-        {
-            id: 3,
-            titulo: "Declaración Anual 2025: Lo que Debes Saber",
-            contenido: "Se acerca la temporada de declaración anual de impuestos. Este año, el SAT ha implementado nuevas facilidades para los contribuyentes:\n\n- Prellenado de información en el portal del SAT\n- Mayor plazo para personas físicas (hasta el 30 de abril)\n- Nuevas deducciones personales permitidas\n- Simplificación del proceso para pequeños contribuyentes\n\nRecuerda que presentar tu declaración a tiempo te evitará recargos y multas. Si tienes dudas sobre qué deducciones puedes aplicar o cómo llenar tu declaración correctamente, no dudes en contactarnos.",
-            categoria: "Fiscal",
-            fecha: "2025-01-12",
-            destacado: false,
-            imagen: null,
-            fechaCreacion: "2025-01-12T10:00:00.000Z"
-        },
-        {
-            id: 4,
-            titulo: "Importancia de la Auditoría Interna",
-            contenido: "La auditoría interna es una herramienta fundamental para garantizar la transparencia y eficiencia de las operaciones empresariales. Algunos beneficios clave incluyen:\n\n- Detección temprana de irregularidades\n- Mejora en los controles internos\n- Optimización de procesos\n- Cumplimiento normativo\n- Mayor confianza para inversionistas\n\nImplementar un sistema de auditoría interna robusto puede ayudar a prevenir fraudes, detectar áreas de mejora y asegurar que tu empresa cumpla con todas las regulaciones aplicables.",
-            categoria: "Auditoría",
-            fecha: "2025-01-10",
-            destacado: false,
-            imagen: null,
-            fechaCreacion: "2025-01-10T10:00:00.000Z"
-        },
-        {
-            id: 5,
-            titulo: "Cambios en el Cálculo de Nóminas",
-            contenido: "Para 2025, se han actualizado varios aspectos relacionados con el cálculo de nóminas:\n\n- Nuevo salario mínimo: $248.93 pesos diarios\n- Actualización de la UMA a $108.57 pesos\n- Cambios en las tablas del ISR\n- Nuevas reglas para cálculo de aguinaldo\n- Modificaciones en prestaciones de ley\n\nEs importante que los departamentos de Recursos Humanos y las empresas actualizen sus sistemas de nómina para reflejar estos cambios y evitar inconsistencias en los pagos a trabajadores.",
-            categoria: "Nóminas",
-            fecha: "2025-01-08",
-            destacado: true,
-            imagen: null,
-            fechaCreacion: "2025-01-08T10:00:00.000Z"
-        }
-    ];
+    // ===== ELEMENTOS DEL DOM =====
+    const gridPublicaciones = document.getElementById('grid-publicaciones');
 
-    // ===== CARGAR PUBLICACIONES DESDE LOCALSTORAGE =====
-    function cargarPublicaciones() {
-        const publicacionesGuardadas = localStorage.getItem(STORAGE_KEY);
-        if (publicacionesGuardadas) {
-            publicaciones = JSON.parse(publicacionesGuardadas);
-        } else {
-            // Si no hay publicaciones guardadas, cargar las de ejemplo
-            publicaciones = [...publicacionesEjemplo];
-            guardarPublicaciones();
-        }
-        renderizarPublicaciones();
-        actualizarEstadisticas();
-    }
+    // Modales
+    const modalCrear = document.getElementById('modal-crear-blog');
+    const formBlog = document.getElementById('form-crear-blog');
+    const modalEliminar = document.getElementById('modal-confirmar-eliminar');
+    const modalDetalles = document.getElementById('modal-detalles-publicacion');
+    const modalCancelar = document.getElementById('modal-confirmar-cancelar');
 
-    // ===== GUARDAR PUBLICACIONES EN LOCALSTORAGE =====
-    function guardarPublicaciones() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(publicaciones));
-        actualizarEstadisticas();
-    }
+    // Botones Principales
+    const btnAgregar = document.getElementById('btn-agregar-publicacion');
+    const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
+    const btnCancelarEliminar = document.getElementById('btn-cancelar-eliminar');
 
-    // ===== MENÚ LATERAL =====
-    const botonMenu = document.getElementById('boton-menu');
-    const menuLateral = document.getElementById('menu-lateral');
-    const overlayMenu = document.getElementById('overlay-menu');
-    const itemsMenu = document.querySelectorAll('.item-menu');
-
-    function esMobile() {
-        return window.innerWidth <= 768;
-    }
-
-    function abrirMenu() {
-        if (esMobile()) {
-            menuLateral.classList.add('abierto');
-            overlayMenu.classList.add('activo');
-            botonMenu.classList.add('activo');
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    function cerrarMenu() {
-        menuLateral.classList.remove('abierto');
-        overlayMenu.classList.remove('activo');
-        botonMenu.classList.remove('activo');
-        document.body.style.overflow = '';
-    }
-
-    if (botonMenu) {
-        botonMenu.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (menuLateral.classList.contains('abierto')) {
-                cerrarMenu();
-            } else {
-                abrirMenu();
-            }
-        });
-    }
-
-    if (overlayMenu) {
-        overlayMenu.addEventListener('click', cerrarMenu);
-    }
-
-    itemsMenu.forEach(item => {
-        item.addEventListener('click', function() {
-            if (esMobile()) {
-                cerrarMenu();
-            }
-        });
-    });
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && menuLateral.classList.contains('abierto') && esMobile()) {
-            cerrarMenu();
-        }
-    });
-
-    window.addEventListener('resize', function() {
-        if (!esMobile()) {
-            cerrarMenu();
-        }
-    });
-
-    // ===== NOTIFICACIÓN BANNER =====
-    const notificacionBanner = document.getElementById('notificacion-banner');
-    const notificacionMensaje = document.getElementById('notificacion-mensaje');
-    const cerrarNotificacion = document.getElementById('cerrar-notificacion');
-    let timeoutNotificacion = null;
-
-    function mostrarNotificacion(mensaje) {
-        if (!notificacionBanner || !notificacionMensaje) return;
-        
-        if (timeoutNotificacion) {
-            clearTimeout(timeoutNotificacion);
-        }
-        
-        notificacionMensaje.textContent = mensaje;
-        notificacionBanner.classList.add('mostrar');
-        
-        timeoutNotificacion = setTimeout(() => {
-            ocultarNotificacion();
-        }, 5000);
-    }
-
-    function ocultarNotificacion() {
-        if (notificacionBanner) {
-            notificacionBanner.classList.remove('mostrar');
-        }
-        if (timeoutNotificacion) {
-            clearTimeout(timeoutNotificacion);
-            timeoutNotificacion = null;
-        }
-    }
-
-    if (cerrarNotificacion) {
-        cerrarNotificacion.addEventListener('click', ocultarNotificacion);
-    }
-
-    // ===== MODALES =====
-    const modalCrearBlog = document.getElementById('modal-crear-blog');
-    const modalConfirmarCancelar = document.getElementById('modal-confirmar-cancelar');
-    const modalDatosCorrectos = document.getElementById('modal-datos-correctos');
-    const modalConfirmarEliminar = document.getElementById('modal-confirmar-eliminar');
-    const modalDetallesPublicacion = document.getElementById('modal-detalles-publicacion');
-    
-    const btnAgregarPublicacion = document.getElementById('btn-agregar-publicacion');
+    // Botones Modales
     const cerrarModalCrear = document.getElementById('cerrar-modal-crear');
     const btnCancelarCrear = document.getElementById('btn-cancelar-crear');
-    const formCrearBlog = document.getElementById('form-crear-blog');
-    
-    const btnVolver = document.getElementById('btn-volver');
-    const btnConfirmarCancelar = document.getElementById('btn-confirmar-cancelar');
-    
-    const btnRegresar = document.getElementById('btn-regresar');
-    const btnConfirmarCrear = document.getElementById('btn-confirmar-crear');
-    
-    const btnCancelarEliminar = document.getElementById('btn-cancelar-eliminar');
-    const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
-    
     const cerrarModalDetalles = document.getElementById('cerrar-modal-detalles');
+    const btnVolver = document.getElementById('btn-volver');
+    const btnSiCancelar = document.getElementById('btn-confirmar-cancelar');
 
-    // Función para abrir modal
-    function abrirModal(modal) {
-        if (modal) {
-            modal.classList.add('activo');
-            document.body.style.overflow = 'hidden';
-        }
-    }
+    // Inputs Formulario
+    const tituloModal = document.querySelector('.modal-titulo-blog');
+    const inpTitulo = document.getElementById('input-titulo');
+    const inpContenido = document.getElementById('input-contenido');
+    const inpCategoria = document.getElementById('input-categoria');
+    const inpFecha = document.getElementById('input-fecha');
+    const inpDestacado = document.getElementById('input-destacado');
 
-    // Función para cerrar modal
-    function cerrarModal(modal) {
-        if (modal) {
-            modal.classList.remove('activo');
-            document.body.style.overflow = '';
-        }
-    }
-
-    // Abrir modal de crear publicación
-    if (btnAgregarPublicacion) {
-        btnAgregarPublicacion.addEventListener('click', function() {
-            publicacionEditando = null;
-            limpiarFormulario();
-            abrirModal(modalCrearBlog);
-        });
-    }
-
-    // Cerrar modal con X
-    if (cerrarModalCrear) {
-        cerrarModalCrear.addEventListener('click', function() {
-            abrirModal(modalConfirmarCancelar);
-        });
-    }
-
-    // Botón cancelar en formulario
-    if (btnCancelarCrear) {
-        btnCancelarCrear.addEventListener('click', function() {
-            abrirModal(modalConfirmarCancelar);
-        });
-    }
-
-    // Modal confirmar cancelar - Botón Volver
-    if (btnVolver) {
-        btnVolver.addEventListener('click', function() {
-            cerrarModal(modalConfirmarCancelar);
-        });
-    }
-
-    // Modal confirmar cancelar - Botón Sí, cancelar
-    if (btnConfirmarCancelar) {
-        btnConfirmarCancelar.addEventListener('click', function() {
-            cerrarModal(modalConfirmarCancelar);
-            cerrarModal(modalCrearBlog);
-            limpiarFormulario();
-        });
-    }
-
-    // ===== SUBIR IMAGEN =====
+    // Imagen
     const inputImagen = document.getElementById('input-imagen');
     const areaSubirImagen = document.getElementById('area-subir-imagen');
-    const previewImagen = document.getElementById('preview-imagen');
+    const previewImagenContainer = document.getElementById('preview-imagen');
     const imagenPreview = document.getElementById('imagen-preview');
     const btnEliminarImagen = document.getElementById('btn-eliminar-imagen');
 
-    if (inputImagen) {
-        inputImagen.addEventListener('change', function(e) {
-            const archivo = e.target.files[0];
-            if (archivo) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    imagenPreview.src = event.target.result;
-                    imagenSeleccionada = event.target.result;
-                    areaSubirImagen.querySelector('.label-subir-imagen').style.display = 'none';
-                    previewImagen.style.display = 'block';
-                };
-                reader.readAsDataURL(archivo);
-            }
-        });
+    // Filtros y Stats
+    const inputBuscar = document.getElementById('input-buscar-blog');
+    const filtroOrden = document.getElementById('filtro-orden');
+    const statTotal = document.getElementById('total-publicaciones');
+    const statDestacados = document.getElementById('total-destacados');
+    const statCategorias = document.getElementById('total-categorias');
+
+    // Notificaciones
+    const notificacionBanner = document.getElementById('notificacion-banner');
+    const notificacionMensaje = document.getElementById('notificacion-mensaje');
+    const cerrarNotificacion = document.getElementById('cerrar-notificacion');
+
+    // Menu y Logout
+    const botonMenu = document.getElementById('boton-menu');
+    const menuLateral = document.getElementById('menu-lateral');
+    const overlayMenu = document.getElementById('overlay-menu');
+    const btnLogout = document.getElementById('logout-button');
+
+    // ===== INICIALIZACIÓN =====
+    init();
+
+    function init() {
+        setupEventListeners();
+        cargarPublicaciones();
     }
 
-    if (btnEliminarImagen) {
-        btnEliminarImagen.addEventListener('click', function() {
-            inputImagen.value = '';
-            imagenSeleccionada = null;
-            imagenPreview.src = '';
-            previewImagen.style.display = 'none';
-            areaSubirImagen.querySelector('.label-subir-imagen').style.display = 'flex';
-        });
-    }
+    // ==========================================
+    // 1. CARGAR DATOS (GET)
+    // ==========================================
+    async function cargarPublicaciones() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/blog/listar`);
 
-    // ===== SUBMIT DEL FORMULARIO =====
-    if (formCrearBlog) {
-        formCrearBlog.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validar campos
-            const titulo = document.getElementById('input-titulo').value.trim();
-            const contenido = document.getElementById('input-contenido').value.trim();
-            const categoria = document.getElementById('input-categoria').value;
-            const fecha = document.getElementById('input-fecha').value;
-            
-            if (!titulo || !contenido || !categoria || !fecha) {
-                alert('Por favor completa todos los campos obligatorios');
-                return;
-            }
-            
-            // Mostrar modal de confirmación
-            abrirModal(modalDatosCorrectos);
-        });
-    }
+            if (!response.ok) throw new Error("Error al cargar el blog");
 
-    // Modal datos correctos - Botón Regresar
-    if (btnRegresar) {
-        btnRegresar.addEventListener('click', function() {
-            cerrarModal(modalDatosCorrectos);
-        });
-    }
+            const data = await response.json();
 
-    // Modal datos correctos - Botón Aceptar
-    if (btnConfirmarCrear) {
-        btnConfirmarCrear.addEventListener('click', function() {
-            cerrarModal(modalDatosCorrectos);
-            cerrarModal(modalCrearBlog);
-            
-            // Obtener datos del formulario
-            const publicacion = {
-                id: publicacionEditando ? publicacionEditando.id : Date.now(),
-                titulo: document.getElementById('input-titulo').value.trim(),
-                contenido: document.getElementById('input-contenido').value.trim(),
-                categoria: document.getElementById('input-categoria').value,
-                fecha: document.getElementById('input-fecha').value,
-                destacado: document.getElementById('input-destacado').checked,
-                imagen: imagenSeleccionada,
-                fechaCreacion: publicacionEditando ? publicacionEditando.fechaCreacion : new Date().toISOString()
-            };
-            
-            if (publicacionEditando) {
-                // Actualizar publicación existente
-                const index = publicaciones.findIndex(p => p.id === publicacionEditando.id);
-                if (index !== -1) {
-                    publicaciones[index] = publicacion;
-                }
-                mostrarNotificacion('Publicación actualizada correctamente');
-            } else {
-                // Agregar nueva publicación
-                publicaciones.unshift(publicacion);
-                mostrarNotificacion('Publicación creada correctamente');
-            }
-            
-            guardarPublicaciones();
-            renderizarPublicaciones();
-            limpiarFormulario();
-        });
-    }
+            // Mapeamos los datos del backend a la estructura que espera tu código original
+            publicaciones = data.map(p => ({
+                id: p.idBlog,
+                titulo: p.titulo,
+                contenido: p.contenido,
+                categoria: p.categoria,
+                fecha: p.fechaPublicacion, // "2025-05-20"
+                destacado: p.destacado,
+                imagen: p.img ? (p.img.startsWith('http') ? p.img : `${API_BASE_URL}${p.img}`) : null,
+                fechaCreacion: p.fechaPublicacion // Usamos la misma para ordenar si no hay timestamp exacto
+            }));
 
-    // ===== FUNCIÓN PARA LIMPIAR FORMULARIO =====
-    function limpiarFormulario() {
-        if (formCrearBlog) {
-            formCrearBlog.reset();
-            if (btnEliminarImagen) {
-                btnEliminarImagen.click();
-            }
-            imagenSeleccionada = null;
-            publicacionEditando = null;
+            renderizarPublicaciones(publicaciones);
+            actualizarEstadisticas();
+
+        } catch (error) {
+            console.error(error);
+            if (gridPublicaciones) gridPublicaciones.innerHTML = `<p style="text-align:center; color:red; width:100%;">Error: ${error.message}</p>`;
         }
     }
 
-    // ===== RENDERIZAR PUBLICACIONES =====
-    function renderizarPublicaciones() {
-        const grid = document.getElementById('grid-publicaciones');
-        if (!grid) return;
-        
-        grid.innerHTML = '';
-        
-        if (publicaciones.length === 0) {
-            grid.innerHTML = `
+    // ==========================================
+    // 2. RENDERIZADO (TU DISEÑO EXACTO)
+    // ==========================================
+    function renderizarPublicaciones(lista) {
+        if (!gridPublicaciones) return;
+        gridPublicaciones.innerHTML = '';
+
+        if (lista.length === 0) {
+            gridPublicaciones.innerHTML = `
                 <div class="tarjeta-vacia">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     <p>No hay publicaciones en el blog</p>
                     <p class="texto-secundario">Haz clic en "Agregar Publicación" para crear una nueva</p>
-                </div>
-            `;
+                </div>`;
             return;
         }
-        
-        publicaciones.forEach(publicacion => {
-            const tarjeta = crearTarjetaPublicacion(publicacion);
-            grid.appendChild(tarjeta);
+
+        lista.forEach(pub => {
+            const tarjeta = crearTarjetaPublicacion(pub);
+            gridPublicaciones.appendChild(tarjeta);
         });
     }
 
-    // ===== CREAR TARJETA DE PUBLICACIÓN =====
+    // --- TU FUNCIÓN ORIGINAL RESTAURADA ---
     function crearTarjetaPublicacion(publicacion) {
         const tarjeta = document.createElement('article');
         tarjeta.className = 'tarjeta-publicacion' + (publicacion.destacado ? ' destacado' : '');
         tarjeta.dataset.publicacionId = publicacion.id;
-        
-        const contenidoImagen = publicacion.imagen 
+
+        const contenidoImagen = publicacion.imagen
             ? `<img src="${publicacion.imagen}" alt="${publicacion.titulo}">`
             : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                     <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>`;
-        
-        const fechaFormateada = formatearFecha(publicacion.fecha);
-        
+
+        const fechaFormateada = formatearFechaParaMostrar(publicacion.fecha);
+
         // Extraer primeras 2 líneas del contenido
         const preview = obtenerPreview(publicacion.contenido, 120);
-        
+
         tarjeta.innerHTML = `
             ${publicacion.destacado ? '<span class="etiqueta-destacado-tarjeta">⭐ Destacada</span>' : ''}
             <button class="boton-eliminar-publicacion" title="Eliminar publicación">
@@ -439,48 +179,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         // Event listener para ver detalles
-        tarjeta.addEventListener('click', function(e) {
+        tarjeta.addEventListener('click', function (e) {
             if (!e.target.closest('.boton-eliminar-publicacion')) {
                 mostrarDetallesPublicacion(publicacion);
             }
         });
-        
+
         // Event listener para eliminar
         const btnEliminar = tarjeta.querySelector('.boton-eliminar-publicacion');
-        btnEliminar.addEventListener('click', function(e) {
+        btnEliminar.addEventListener('click', function (e) {
             e.stopPropagation();
-            tarjetaAEliminar = publicacion;
-            abrirModal(modalConfirmarEliminar);
+            tarjetaAEliminar = publicacion; // Guardamos la publicación completa a eliminar
+            abrirModal(modalEliminar);
         });
-        
+
         return tarjeta;
     }
 
-    // ===== OBTENER PREVIEW DEL CONTENIDO =====
     function obtenerPreview(contenido, maxLength) {
-        if (contenido.length <= maxLength) {
-            return contenido;
-        }
+        if (!contenido) return '';
+        if (contenido.length <= maxLength) return contenido;
         return contenido.substring(0, maxLength) + '...';
     }
 
-    // ===== MOSTRAR DETALLES DE LA PUBLICACIÓN =====
+    // ==========================================
+    // 3. DETALLES Y EDICIÓN (DISEÑO ORIGINAL RESTAURADO)
+    // ==========================================
     function mostrarDetallesPublicacion(publicacion) {
         const contenido = document.querySelector('.contenido-modal-detalles');
         if (!contenido) return;
-        
-        const fechaFormateada = formatearFecha(publicacion.fecha);
-        
-        const contenidoImagen = publicacion.imagen 
+
+        const fechaFormateada = formatearFechaParaMostrar(publicacion.fecha);
+
+        const contenidoImagen = publicacion.imagen
             ? `<img src="${publicacion.imagen}" alt="${publicacion.titulo}">`
             : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                     <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>`;
-        
+               </svg>`;
+
         // Formatear contenido con saltos de línea
         const contenidoFormateado = publicacion.contenido.split('\n').map(parrafo => {
             if (parrafo.trim()) {
@@ -488,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return '';
         }).join('');
-        
+
         contenido.innerHTML = `
             <div class="header-detalle-publicacion">
                 ${contenidoImagen}
@@ -516,157 +256,311 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 
                 <div class="footer-detalle-publicacion">
-                    <button class="boton-editar-publicacion" onclick="editarPublicacion(${publicacion.id})">Editar Publicación</button>
+                    <button class="boton-editar-publicacion" onclick="window.prepararEdicionEncontrada(${publicacion.id})">Editar Publicación</button>
                 </div>
             </div>
         `;
-        
-        abrirModal(modalDetallesPublicacion);
+
+        abrirModal(modalDetalles);
     }
 
-    // Hacer función editarPublicacion global
-    window.editarPublicacion = function(publicacionId) {
-        const publicacion = publicaciones.find(p => p.id === publicacionId);
-        if (!publicacion) return;
-        
-        publicacionEditando = publicacion;
-        
-        // Llenar formulario con datos de la publicación
-        document.getElementById('input-titulo').value = publicacion.titulo;
-        document.getElementById('input-contenido').value = publicacion.contenido;
-        document.getElementById('input-categoria').value = publicacion.categoria;
-        document.getElementById('input-fecha').value = publicacion.fecha;
-        document.getElementById('input-destacado').checked = publicacion.destacado;
-        
-        if (publicacion.imagen) {
-            imagenSeleccionada = publicacion.imagen;
-            imagenPreview.src = publicacion.imagen;
-            areaSubirImagen.querySelector('.label-subir-imagen').style.display = 'none';
-            previewImagen.style.display = 'block';
+    // Helper Global para el botón inyectado en el HTML
+    window.prepararEdicionEncontrada = function (id) {
+        const pub = publicaciones.find(p => p.id === id);
+        if (pub) {
+            cerrarModal(modalDetalles);
+            prepararEdicion(pub);
         }
-        
-        cerrarModal(modalDetallesPublicacion);
-        abrirModal(modalCrearBlog);
     };
 
-    // Cerrar modal de detalles
-    if (cerrarModalDetalles) {
-        cerrarModalDetalles.addEventListener('click', function() {
-            cerrarModal(modalDetallesPublicacion);
-        });
+    // ==========================================
+    // 4. CREAR / EDITAR (POST/PUT)
+    // ==========================================
+    function prepararEdicion(pub) {
+        publicacionEditando = pub;
+
+        const tituloModal = document.querySelector('.modal-titulo-blog');
+        if (tituloModal) tituloModal.textContent = "Editar Publicación";
+
+        const btnSubmit = document.getElementById('form-crear-blog').querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.textContent = "Guardar Cambios";
+
+        // Llenar campos
+        document.getElementById('input-titulo').value = pub.titulo;
+        document.getElementById('input-contenido').value = pub.contenido;
+        document.getElementById('input-categoria').value = pub.categoria;
+
+        // --- AQUÍ ESTABA EL ERROR: Usamos la nueva función formatear ---
+        document.getElementById('input-fecha').value = formatearFechaParaInput(pub.fecha);
+
+        document.getElementById('input-destacado').checked = pub.destacado;
+
+        // Preview de imagen
+        const imgPreview = document.getElementById('imagen-preview');
+        const containerPreview = document.getElementById('preview-imagen');
+        const areaSubir = document.getElementById('area-subir-imagen');
+        const labelSubir = areaSubir.querySelector('.label-subir-imagen');
+
+        if (pub.imagen) {
+            // Validamos si es http o local
+            const src = pub.imagen.startsWith('http') ? pub.imagen : `${API_BASE_URL}${pub.imagen}`;
+            imgPreview.src = src;
+
+            containerPreview.style.display = 'block';
+            if (labelSubir) labelSubir.style.display = 'none';
+        } else {
+            resetImagen();
+        }
+
+        abrirModal(document.getElementById('modal-crear-blog'));
     }
 
-    // ===== ELIMINAR PUBLICACIÓN =====
-    if (btnCancelarEliminar) {
-        btnCancelarEliminar.addEventListener('click', function() {
-            cerrarModal(modalConfirmarEliminar);
-            tarjetaAEliminar = null;
-        });
-    }
+    // Submit Formulario
+    if (formBlog) {
+        formBlog.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btnSubmit = formBlog.querySelector('button[type="submit"]');
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "Guardando...";
 
-    if (btnConfirmarEliminar) {
-        btnConfirmarEliminar.addEventListener('click', function() {
-            if (tarjetaAEliminar) {
-                publicaciones = publicaciones.filter(p => p.id !== tarjetaAEliminar.id);
-                guardarPublicaciones();
-                renderizarPublicaciones();
-                mostrarNotificacion('Publicación eliminada correctamente');
-                tarjetaAEliminar = null;
-            }
-            cerrarModal(modalConfirmarEliminar);
-        });
-    }
+            try {
+                const formData = new FormData();
+                formData.append('titulo', inpTitulo.value);
+                formData.append('contenido', inpContenido.value);
+                formData.append('categoria', inpCategoria.value);
+                formData.append('fechaPublicacion', inpFecha.value);
+                formData.append('destacado', inpDestacado.checked);
 
-    // ===== ACTUALIZAR ESTADÍSTICAS =====
-    function actualizarEstadisticas() {
-        document.getElementById('total-publicaciones').textContent = publicaciones.length;
-        document.getElementById('total-destacados').textContent = publicaciones.filter(p => p.destacado).length;
-        const categoriasUnicas = new Set(publicaciones.map(p => p.categoria));
-        document.getElementById('total-categorias').textContent = categoriasUnicas.size;
-    }
+                if (inputImagen.files[0]) {
+                    formData.append('imagen', inputImagen.files[0]);
+                }
 
-    // ===== BUSCADOR =====
-    const inputBuscar = document.getElementById('input-buscar-blog');
-    if (inputBuscar) {
-        inputBuscar.addEventListener('input', function() {
-            const termino = this.value.toLowerCase();
-            const tarjetas = document.querySelectorAll('.tarjeta-publicacion');
-            
-            tarjetas.forEach(tarjeta => {
-                const titulo = tarjeta.querySelector('.titulo-publicacion').textContent.toLowerCase();
-                const categoria = tarjeta.querySelector('.etiqueta-categoria').textContent.toLowerCase();
-                const preview = tarjeta.querySelector('.preview-contenido')?.textContent.toLowerCase() || '';
-                
-                if (titulo.includes(termino) || categoria.includes(termino) || preview.includes(termino)) {
-                    tarjeta.style.display = '';
+                let url = `${API_BASE_URL}/admin/blog/crear`;
+                let method = 'POST';
+
+                if (publicacionEditando) {
+                    url = `${API_BASE_URL}/admin/blog/editar/${publicacionEditando.id}`;
+                    method = 'PUT';
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    mostrarNotificacion(publicacionEditando ? "Actualizado correctamente" : "Creado correctamente");
+                    cerrarModal(modalCrear);
+                    limpiarFormulario();
+                    cargarPublicaciones();
                 } else {
-                    tarjeta.style.display = 'none';
+                    throw new Error("Error en la operación");
                 }
-            });
+            } catch (error) {
+                alert("Error: " + error.message);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = publicacionEditando ? "Guardar Cambios" : "Publicar";
+            }
         });
     }
 
-    // ===== FILTRO DE ORDEN =====
-    const filtroOrden = document.getElementById('filtro-orden');
-    if (filtroOrden) {
-        filtroOrden.addEventListener('change', function() {
-            const orden = this.value;
-            
-            if (orden === 'reciente') {
-                publicaciones.sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion));
-            } else if (orden === 'antiguo') {
-                publicaciones.sort((a, b) => new Date(a.fechaCreacion) - new Date(b.fechaCreacion));
-            } else if (orden === 'titulo') {
-                publicaciones.sort((a, b) => a.titulo.localeCompare(b.titulo));
-            }
-            
-            renderizarPublicaciones();
+    function limpiarFormulario() {
+        formBlog.reset();
+        resetImagen();
+        publicacionEditando = null;
+        if (tituloModal) tituloModal.textContent = "Crear Nueva Publicación";
+        const btnS = formBlog.querySelector('button[type="submit"]');
+        if (btnS) btnS.textContent = "Publicar";
+    }
+
+    // ==========================================
+    // 5. ELIMINAR (DELETE)
+    // ==========================================
+    if (btnConfirmarEliminar) {
+        btnConfirmarEliminar.addEventListener('click', async () => {
+            if (!tarjetaAEliminar) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/blog/eliminar/${tarjetaAEliminar.id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    mostrarNotificacion("Eliminado correctamente");
+                    cerrarModal(modalEliminar);
+                    cargarPublicaciones();
+                } else {
+                    alert("No se pudo eliminar");
+                }
+            } catch (e) { console.error(e); }
         });
     }
 
-    // ===== UTILIDADES =====
-    function formatearFecha(fecha) {
-        const date = new Date(fecha + 'T00:00:00');
-        const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
-        return date.toLocaleDateString('es-MX', opciones);
-    }
-
-    // ===== CERRAR MODALES CON ESCAPE Y CLICK FUERA =====
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            if (modalDetallesPublicacion && modalDetallesPublicacion.classList.contains('activo')) {
-                cerrarModal(modalDetallesPublicacion);
-            } else if (modalDatosCorrectos && modalDatosCorrectos.classList.contains('activo')) {
-                cerrarModal(modalDatosCorrectos);
-            } else if (modalConfirmarEliminar && modalConfirmarEliminar.classList.contains('activo')) {
-                cerrarModal(modalConfirmarEliminar);
-                tarjetaAEliminar = null;
-            } else if (modalConfirmarCancelar && modalConfirmarCancelar.classList.contains('activo')) {
-                cerrarModal(modalConfirmarCancelar);
-            } else if (modalCrearBlog && modalCrearBlog.classList.contains('activo')) {
-                abrirModal(modalConfirmarCancelar);
-            }
-        }
-    });
-
-    [modalCrearBlog, modalConfirmarCancelar, modalDatosCorrectos, modalConfirmarEliminar, modalDetallesPublicacion].forEach(modal => {
-        if (modal) {
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    if (modal === modalCrearBlog) {
-                        abrirModal(modalConfirmarCancelar);
-                    } else if (modal === modalConfirmarEliminar) {
-                        cerrarModal(modal);
-                        tarjetaAEliminar = null;
-                    } else {
-                        cerrarModal(modal);
-                    }
+    // ==========================================
+    // 6. HELPERS Y LISTENERS
+    // ==========================================
+    function setupEventListeners() {
+        // Imagen
+        if (inputImagen) {
+            inputImagen.addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagenPreview.src = e.target.result;
+                        previewImagenContainer.style.display = 'block';
+                        areaSubirImagen.querySelector('.label-subir-imagen').style.display = 'none';
+                    };
+                    reader.readAsDataURL(this.files[0]);
                 }
             });
         }
-    });
 
-    // ===== INICIALIZAR =====
-    cargarPublicaciones();
-    console.log('Blog Admin inicializado correctamente');
+        if (btnEliminarImagen) {
+            btnEliminarImagen.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetImagen();
+            });
+        }
+
+        // Modales
+        if (btnAgregar) btnAgregar.addEventListener('click', () => {
+            limpiarFormulario();
+            inpFecha.valueAsDate = new Date();
+            abrirModal(modalCrear);
+        });
+
+        if (cerrarModalCrear) cerrarModalCrear.addEventListener('click', () => abrirModal(modalCancelar));
+        if (btnCancelarCrear) btnCancelarCrear.addEventListener('click', () => abrirModal(modalCancelar));
+        if (cerrarModalDetalles) cerrarModalDetalles.addEventListener('click', () => cerrarModal(modalDetalles));
+        if (btnCancelarEliminar) btnCancelarEliminar.addEventListener('click', () => cerrarModal(modalEliminar));
+
+        if (btnVolver) btnVolver.addEventListener('click', () => cerrarModal(modalCancelar));
+        if (btnSiCancelar) btnSiCancelar.addEventListener('click', () => {
+            cerrarModal(modalCancelar);
+            cerrarModal(modalCrear);
+            limpiarFormulario();
+        });
+
+        // Filtros
+        if (inputBuscar) {
+            inputBuscar.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = publicaciones.filter(p => p.titulo.toLowerCase().includes(term));
+                renderizarPublicaciones(filtered);
+            });
+        }
+
+        if (filtroOrden) {
+            filtroOrden.addEventListener('change', (e) => {
+                const tipo = e.target.value;
+                let ordenados = [...publicaciones];
+                if (tipo === 'reciente') ordenados.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                else if (tipo === 'antiguo') ordenados.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+                else if (tipo === 'titulo') ordenados.sort((a, b) => a.titulo.localeCompare(b.titulo));
+                renderizarPublicaciones(ordenados);
+            });
+        }
+
+        if (cerrarNotificacion) cerrarNotificacion.addEventListener('click', () => notificacionBanner.classList.remove('mostrar'));
+
+        // Click fuera
+        window.onclick = (e) => {
+            if (e.target.classList.contains('modal-overlay')) cerrarModal(e.target);
+        };
+
+        // Menú y Logout
+        if (botonMenu) botonMenu.addEventListener('click', () => {
+            menuLateral.classList.toggle('abierto');
+            overlayMenu.classList.toggle('activo');
+            botonMenu.classList.toggle('activo');
+        });
+        if (overlayMenu) overlayMenu.addEventListener('click', () => {
+            menuLateral.classList.remove('abierto');
+            overlayMenu.classList.remove('activo');
+            botonMenu.classList.remove('activo');
+        });
+        if (btnLogout) {
+            btnLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm("¿Cerrar sesión?")) {
+                    localStorage.clear();
+                    window.location.href = '../paginas/Rol_Usuario.html';
+                }
+            });
+        }
+    }
+
+    // Utilidades Fechas
+    function formatearFechaParaMostrar(fechaInput) {
+        if (!fechaInput) return 'Sin fecha';
+
+        let fechaObj;
+
+        // CASO A: Si viene como Array [2025, 12, 3] (Formato Java)
+        if (Array.isArray(fechaInput)) {
+            // new Date(año, mes - 1, dia) -> En JS los meses van de 0 a 11
+            fechaObj = new Date(fechaInput[0], fechaInput[1] - 1, fechaInput[2]);
+        }
+        // CASO B: Si viene como String "2025-12-03"
+        else {
+            // Agregamos hora T00:00 para evitar problemas de zona horaria
+            fechaObj = new Date(fechaInput + (String(fechaInput).includes('T') ? '' : 'T00:00:00'));
+        }
+
+        if (isNaN(fechaObj.getTime())) return 'Fecha inválida';
+
+        return fechaObj.toLocaleDateString('es-MX', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+    function formatearFechaParaInput(fechaInput) {
+        if (!fechaInput) return '';
+
+        // CASO A: El backend envía Array [Año, Mes, Dia]
+        if (Array.isArray(fechaInput)) {
+            const anio = fechaInput[0];
+            // .padStart(2, '0') es OBLIGATORIO para que el input date lo acepte (ej: "05" en vez de "5")
+            const mes = String(fechaInput[1]).padStart(2, '0');
+            const dia = String(fechaInput[2]).padStart(2, '0');
+            return `${anio}-${mes}-${dia}`;
+        }
+
+        // CASO B: El backend envía String "2025-12-03T..."
+        if (typeof fechaInput === 'string') {
+            return fechaInput.split('T')[0];
+        }
+
+        return '';
+    }
+
+    function resetImagen() {
+        inputImagen.value = '';
+        imagenPreview.src = '';
+        previewImagenContainer.style.display = 'none';
+        areaSubirImagen.querySelector('.label-subir-imagen').style.display = 'flex';
+    }
+
+    function abrirModal(m) { if (m) { m.classList.add('activo'); document.body.style.overflow = 'hidden'; } }
+    function cerrarModal(m) { if (m) { m.classList.remove('activo'); document.body.style.overflow = ''; } }
+
+    function mostrarNotificacion(msg) {
+        if (notificacionMensaje) notificacionMensaje.textContent = msg;
+        if (notificacionBanner) {
+            notificacionBanner.classList.add('mostrar');
+            setTimeout(() => notificacionBanner.classList.remove('mostrar'), 3000);
+        }
+    }
+
+    function actualizarEstadisticas() {
+        if (statTotal) statTotal.textContent = publicaciones.length;
+        if (statDestacados) statDestacados.textContent = publicaciones.filter(p => p.destacado).length;
+        if (statCategorias) {
+            const cats = new Set(publicaciones.map(p => p.categoria));
+            statCategorias.textContent = cats.size;
+        }
+    }
 });
