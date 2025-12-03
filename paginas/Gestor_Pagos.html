@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Pagos - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Gestor_Pagos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="../js/Gestor_Pagos.js" defer></script>
+</head>
+
+<body>
+    <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+    </button>
+
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <aside class="menu-lateral" id="menu-lateral">
+        <div class="contenedor-menu">
+            <a href="#" class="item-menu">
+                <img src="../src/Logo_Sin_Fondo.png" alt="Logo AFGCORPORACIÓN" class="icono-menu">
+                <span>AFGCORPORACIÓN</span>
+            </a>
+
+            <a href="../paginas/Perfil_Administrador.html" class="item-menu">
+                <img src="../src/Perfil.png" alt="Perfil" class="icono-menu">
+                <span>Perfil</span>
+            </a>
+
+            <a href="../paginas/Control_Usarios.html" class="item-menu">
+                <img src="../src/Contadores.png" alt="Usuarios" class="icono-menu">
+                <span>Control de usuarios</span>
+            </a>
+
+            <a href="../paginas/Blog_Admin.html" class="item-menu">
+                <img src="../src/Talleres.png" alt="Blog" class="icono-menu">
+                <span>blog</span>
+            </a>
+
+            <a href="../paginas/Gestor_Pagos.html" class="item-menu activo">
+                <img src="../src/Pagos.png" alt="Pagos" class="icono-menu">
+                <span>Gestor de pagos</span>
+            </a>
+
+            <a href="../paginas/Control_Solicitudes.html" class="item-menu">
+                <img src="../src/Solicitudes.png" alt="Solicitudes" class="icono-menu">
+                <span>Control de solicitudes</span>
+            </a>
+
+            <a href="../paginas/Historial_Asesorias.html" class="item-menu">
+                <img src="../src/Historial.png" alt="Historial" class="icono-menu">
+                <span>Historial de asesorías</span>
+            </a>
+        </div>
+
+        <a href="../paginas/Rol_Usuario.html" class="item-menu item-logout" id="logout-button">
+            <img src="../src/Salida.png" alt="Cerrar Sesión" class="icono-menu">
+            <span>Cerrar Sesión</span>
+        </a>
+    </aside>
+
+    <main class="contenido-principal">
+        <section class="seccion-encabezado">
+            <div>
+                <h1 class="titulo-pagina">Gestor de pagos</h1>
+                <p class="subtitulo-pagina">Administra y da seguimiento a todos los pagos</p>
+            </div>
+        </section>
+
+        <section class="seccion-estadisticas-pagos">
+            <div class="tarjeta-estadistica-pago">
+                <div class="info-estadistica-pago">
+                    <p class="label-estadistica-pago">Total Cobrado</p>
+                    <p class="numero-estadistica-pago" id="total-cobrado">$0</p>
+                </div>
+                <div class="icono-estadistica-pago icono-total-cobrado">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tarjeta-estadistica-pago">
+                <div class="info-estadistica-pago">
+                    <p class="label-estadistica-pago">Pagadas</p>
+                    <p class="numero-estadistica-pago" id="pagadas">0</p>
+                </div>
+                <div class="icono-estadistica-pago icono-pagadas">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tarjeta-estadistica-pago">
+                <div class="info-estadistica-pago">
+                    <p class="label-estadistica-pago">Pendientes</p>
+                    <p class="numero-estadistica-pago" id="pendientes">0</p>
+                </div>
+                <div class="icono-estadistica-pago icono-pendientes">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tarjeta-estadistica-pago">
+                <div class="info-estadistica-pago">
+                    <p class="label-estadistica-pago">Total Citas</p>
+                    <p class="numero-estadistica-pago" id="total-citas">0</p>
+                </div>
+                <div class="icono-estadistica-pago icono-proceso"> <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-tabla-pagos">
+            <div class="controles-tabla-pagos">
+                <div class="buscador-pagos">
+                    <svg class="icono-buscar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" class="input-buscar-pagos" id="input-buscar"
+                        placeholder="Buscar por cliente, servicio, id...">
+                </div>
+
+                <div class="filtros-pagos">
+                    <select class="filtro-select" id="filtro-estado-pago">
+                        <option value="todos">Todos los Estados</option>
+                        <option value="Pagado">Pagado</option>
+                        <option value="Pendiente">Pendiente</option>
+                    </select>
+
+                    <select class="filtro-select" id="filtro-servicio">
+                        <option value="todos">Todos los Servicios</option>
+                    </select>
+                </div>
+
+                <div class="acciones-tabla">
+                    <button class="boton-ordenar" id="btn-ordenar" title="Ordenar por Fecha (Próximamente)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path>
+                        </svg>
+                    </button>
+
+                    <button class="boton-exportar" id="btn-exportar">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-pagos" id="tabla-pagos-excel">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>ID Cita</th>
+                            <th>Servicio</th>
+                            <th>Fecha Cita</th>
+                            <th>Hora</th>
+                            <th>Monto</th>
+                            <th>Método Pago</th>
+                            <th>Estado Pago</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pagos">
+                        <tr>
+                            <td colspan="9" style="text-align: center;">Cargando datos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="paginacion">
+                <span class="info-paginacion" id="info-paginacion">Mostrando 0 de 0 registros</span>
+                <div class="controles-paginacion">
+                    <button class="btn-pagina" id="btn-anterior" disabled>Anterior</button>
+                    <div id="numeros-pagina" class="controles-paginacion">
+                        <button class="btn-pagina activo">1</button>
+                    </div>
+                    <button class="btn-pagina" id="btn-siguiente" disabled>Siguiente</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-confirmar-exportar" class="modal-overlay">
+        <div class="modal-confirmacion">
+            <div class="modal-icono-info">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </div>
+            <h3 class="modal-titulo-confirmacion">¿Exportar datos a Excel?</h3>
+            <p class="modal-mensaje-confirmacion">Se exportarán todos los registros visibles actualmente en la tabla.
+            </p>
+            <div class="botones-confirmacion">
+                <button class="boton-cancelar-modal" id="btn-cancelar-exportar">Cancelar</button>
+                <button class="boton-confirmar-verde" id="btn-confirmar-exportar">Sí, exportar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

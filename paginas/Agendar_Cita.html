@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Agendar_Cita.css">
+
+    <script src="../js/Agendar_Cita.js" defer></script>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=Aczd__Hq5SkKOFTU8G2mVuraeeSG15vhH5ZPmxLRbl65-LdLJRNWdJbV864ECQWhIajU6DMpHOaUjYsD&currency=MXN"></script>
+</head>
+
+<body>
+    <!-- Botón Menú Móvil -->
+    <button class="boton-hamburguesa" id="boton-hamburguesa" aria-label="Abrir menú">
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+    </button>
+
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <!-- Menú Lateral -->
+    <aside class="menu-lateral" id="menu-lateral">
+        <div class="logo-contenedor">
+            <h2 class="logo-texto">AFGCORPORACIÓN</h2>
+        </div>
+
+        <nav class="navegacion-menu">
+            <a href="Perfil_Cliente.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="texto-menu">Perfil</span>
+            </a>
+
+            <a href="Blog_Cliente.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span class="texto-menu">Blog</span>
+            </a>
+
+            <a href="Historial_Asesorias_Cliente.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span class="texto-menu">Historial de asesorías</span>
+            </a>
+
+            <a href="Agendar_Cita.html" class="item-menu activo">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span class="texto-menu">Agendar Cita</span>
+            </a>
+        </nav>
+
+        <a href="../paginas/Rol_Usuario.html" class="item-menu item-logout" id="logout-button">
+            <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span class="texto-menu">Cerrar Sesión</span>
+        </a>
+
+        <div class="info-usuario" style="display: none;">
+            <span id="nombre-usuario"></span>
+        </div>
+    </aside>
+
+    <main class="contenido-principal">
+        <div class="encabezado-cita">
+            <h1 class="titulo-pagina">Agendar Cita</h1>
+            <p class="subtitulo-pagina">Selecciona una fecha y completa los detalles de tu asesoría</p>
+        </div>
+
+        <div class="contenedor-agendar">
+            <!-- Sección Izquierda: Calendario -->
+            <div class="seccion-calendario">
+                <div class="calendario-wrapper">
+                    <div class="calendario-header">
+                        <h3 class="titulo-seccion">Selecciona una fecha</h3>
+                    </div>
+
+                    <div class="calendario">
+                        <div class="calendario-navegacion">
+                            <button class="btn-mes" id="mes-anterior">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <div class="mes-anio" id="mes-anio">Octubre 2025</div>
+                            <button class="btn-mes" id="mes-siguiente">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="calendario-dias-semana">
+                            <div class="dia-semana">Do</div>
+                            <div class="dia-semana">Lu</div>
+                            <div class="dia-semana">Ma</div>
+                            <div class="dia-semana">Mi</div>
+                            <div class="dia-semana">Ju</div>
+                            <div class="dia-semana">Vi</div>
+                            <div class="dia-semana">Sa</div>
+                        </div>
+
+                        <div class="calendario-dias" id="calendario-dias">
+                            <!-- JS rellena esto -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Derecha: Formulario -->
+            <div class="seccion-detalles">
+                <div class="detalles-wrapper">
+                    <h3 class="titulo-seccion">Detalles de la Cita</h3>
+
+                    <form class="formulario-cita" id="formulario-cita">
+
+                        <div class="campo-form">
+                            <label class="label-campo">Tipo de Asesoría</label>
+                            <select class="select-campo" id="tipo-asesoria" required>
+                                <option value="">Cargando servicios...</option>
+                            </select>
+                        </div>
+
+                        <div class="campo-form campo-total" id="seccion-total" style="display: none;">
+                            <label class="label-campo">Total a Pagar</label>
+                            <div class="precio-total" id="precio-total">$0.00 MXN</div>
+                        </div>
+
+                        <div class="campo-form">
+                            <label class="label-campo">Horario</label>
+                            <select class="select-campo" id="horario" required>
+                                <option value="">Selecciona un horario</option>
+                                <option value="09:00 AM">09:00 AM</option>
+                                <option value="10:00 AM">10:00 AM</option>
+                                <option value="11:00 AM">11:00 AM</option>
+                                <option value="12:00 PM">12:00 PM</option>
+                                <option value="02:00 PM">02:00 PM</option>
+                                <option value="03:00 PM">03:00 PM</option>
+                                <option value="04:00 PM">04:00 PM</option>
+                                <option value="05:00 PM">05:00 PM</option>
+                            </select>
+                        </div>
+
+                        <div class="campo-form" id="seccion-modalidad">
+                            <label class="label-campo">Modalidad</label>
+                            <div class="opciones-pago">
+                                <input type="radio" name="modalidad" id="modalidad-presencial" value="Presencial"
+                                    required>
+                                <label for="modalidad-presencial" class="btn-pago btn-modalidad">
+                                    <svg class="logo-pago" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span>Presencial</span>
+                                </label>
+                                <input type="radio" name="modalidad" id="modalidad-meet" value="Meet" required>
+                                <label for="modalidad-meet" class="btn-pago btn-modalidad">
+                                    <svg class="logo-pago" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M17 10-7 10"></path>
+                                        <path d="m13 14-4-4 4-4"></path>
+                                        <path d="M4 14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2"></path>
+                                        <path d="M20 14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2"></path>
+                                    </svg>
+                                    <span>Meet</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="campo-form">
+                            <label class="label-campo">Notas o comentarios</label>
+                            <textarea class="textarea-campo" id="notas" rows="4"
+                                placeholder="Describe brevemente el motivo de la consulta..."></textarea>
+                        </div>
+
+                        <!-- SECCIÓN DE PAGO (SOLO PAYPAL) -->
+                        <div class="campo-form seccion-pago" id="seccion-pago" style="display: none;">
+                            <label class="label-campo">Método de Pago</label>
+                            <div class="opciones-pago">
+                                <!-- Única opción: PayPal (Pre-seleccionada) -->
+                                <input type="radio" name="metodo-pago" id="pago-paypal" value="paypal" checked required>
+                                <label for="pago-paypal" class="btn-pago activo-fijo">
+                                    <svg class="logo-pago" viewBox="0 0 128 33" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M9.57 32.228H0L6.155 0h9.569L9.57 32.228zM39.69 13.568c0-3.352-2.344-5.418-6.02-5.418-4.912 0-8.212 2.76-9.14 7.63l-.134.733c-.336 1.847-.537 2.964-.67 3.553l-.067.401c-.134.733-.201 1.134-.201 1.268.067 3.218 2.41 5.284 6.087 5.284 4.844 0 8.077-2.693 9.073-7.496l.134-.733c.335-1.848.536-2.965.67-3.554l.067-.401c.133-.733.2-.133.2-.133s0-.001 0-.001zM23.102 13.901c.067-3.62 2.76-6.155 6.422-6.155 3.352 0 5.484 1.78 6.087 4.547l-.067.268c-.201 1.068-.469 2.41-.67 3.351l-.067.402c-.201 1.068-.469 2.478-.67 3.418l-.067.268c-.603 2.76-2.735 4.547-6.087 4.547-3.62 0-6.355-2.535-6.422-6.155h7.564v-3.886l-6.02-.001zM113.88 13.568c0-3.352-2.344-5.418-6.02-5.418-4.912 0-8.212 2.76-9.14 7.63l-.134.733c-.336 1.847-.537 2.964-.67 3.553l-.067.401c-.134.733-.201 1.134-.201 1.268.067 3.218 2.41 5.284 6.087 5.284 4.844 0 8.077-2.693 9.073-7.496l.134-.733c.335-1.848.536-2.965.67-3.554l.067-.401c.133-.733.2-.133.2-.133s0-.001 0-.001zM97.313 13.901c.067-3.62 2.76-6.155 6.422-6.155 3.352 0 5.484 1.78 6.087 4.547l-.067.268c-.201 1.068-.469 2.41-.67 3.351l-.067.402c-.201 1.068-.469 2.478-.67 3.418l-.067.268c-.603 2.76-2.735 4.547-6.087 4.547-3.62 0-6.355-2.535-6.422-6.155h7.564v-3.886l-6.02-.001zM128 13.635c0-3.352-2.344-5.484-6.02-5.484-4.212 0-7.363 2.41-8.675 6.623l-.134.733c-.268 1.478-.469 2.964-.603 3.62l-.067.401c-.134.667-.201 1.068-.201 1.201.067 3.218 2.41 5.284 6.087 5.284 3.944 0 6.962-2.048 7.876-5.888l.201-1.002.067-.401c.201-1.068.402-2.478.536-3.418l.067-.268c.067-.402.134-.867.134-1.335 0-.469 0-.867-.067-1.134zM111.413 13.901c.067-3.62 2.76-6.155 6.422-6.155 3.352 0 5.484 1.78 6.087 4.547l-.067.268c-.201 1.068-.469 2.41-.67 3.351l-.067.402c-.201 1.068-.469 2.478-.67 3.418l-.067.268c-.603 2.76-2.735 4.547-6.087 4.547-3.62 0-6.355-2.535-6.422-6.155h7.564v-3.886l-6.02-.001zM86.208 8.15h-6.288l-.335 2.212c-.667-1.713-2.628-2.41-4.844-2.41-4.01 0-7.028 3.098-7.742 7.095l-.134.733c-.268 1.478-.469 2.964-.603 3.62l-.067.401c-.134.667-.201 1.068-.201 1.201.067 3.218 2.545 5.284 6.22 5.284 4.01 0 6.624-2.41 7.227-5.955l.335-2.212h-7.227c-.067 1.478-.938 2.343-2.478 2.343-1.645 0-2.41-.801-2.478-2.279h11.942c.402-1.915.603-3.352.603-4.413 0-4.077-2.827-7.028-7.095-7.028-3.03 0-5.484 1.546-6.623 3.819.867-2.627 3.418-4.346 6.623-4.346 2.048 0 3.62.603 4.643 1.78l1.478-1.546zM55.72 26.11c-1.268 0-2.146-.867-2.41-2.145l-4.278-21.753h9.7l3.098 18.948 2.012-12.812 1.478-.801h8.742l-5.618 27.762h-9.5zM48.225 8.15h-7.028l.867 4.614h6.088l-.867-4.614z">
+                                        </path>
+                                    </svg>
+                                    <span>PayPal</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-agendar" id="btn-agendar">
+                            Continuar al Pago
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Confirmación y Pago -->
+    <div class="modal-overlay" id="modal-confirmar">
+        <div class="contenido-modal">
+            <h3 class="modal-titulo" id="modal-titulo">Confirmar y Pagar</h3>
+            <p class="modal-texto" id="modal-texto">Revisa los detalles antes de pagar.</p>
+
+            <div id="modal-resumen"></div>
+
+            <!-- CONTENEDOR PARA BOTONES PAYPAL -->
+            <div id="paypal-button-container" style="margin-top: 20px;"></div>
+
+            <div class="acciones-modal">
+                <button id="btn-cancelar-modal" class="btn-modal btn-cancelar">Cancelar</button>
+                <!-- Botón oculto por JS porque es solo PayPal -->
+                <button id="btn-aceptar-modal" class="btn-modal btn-aceptar" style="display: none;">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación Flotante -->
+    <div class="notificacion" id="notificacion">
+        <div class="notificacion-contenido">
+            <div class="notificacion-icono">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <span class="notificacion-texto">Se agendó la cita correctamente</span>
+            <button class="notificacion-cerrar" id="cerrar-notificacion">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Dashboard_Asesor.css">
+    <script src="../js/Dashboard_Asesor.js" defer></script>
+</head>
+<body>
+    <!-- Botón hamburguesa - Solo visible en móvil -->
+    <button class="boton-hamburguesa" id="boton-hamburguesa" aria-label="Abrir menú">
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+    </button>
+
+    <!-- Overlay oscuro -->
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <!-- Menú lateral -->
+    <aside class="menu-lateral" id="menu-lateral">
+        <nav class="navegacion-menu">
+            <a href="Dashboard_Asesor.html" class="item-menu activo">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span class="texto-menu">Inicio</span>
+            </a>
+            
+            <a href="Perfil_Asesor.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="texto-menu">Perfil</span>
+            </a>
+            
+            <a href="Control_Solicitudes_Asesor.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span class="texto-menu">Control de consultas</span>
+            </a>
+            
+            <a href="Historial_Asesorias_Asesor.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span class="texto-menu">Historial de asesorías</span>
+            </a>
+        </nav>
+        <a href="../paginas/Rol_Usuario.html" class="item-menu item-logout" id="logout-button">
+            <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span class="texto-menu">Cerrar Sesión</span>
+        </a>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="contenido-principal">
+        <!-- Encabezado -->
+        <div class="encabezado-dashboard">
+            <div>
+                <h1 class="titulo-pagina">Dashboard</h1>
+                <p class="subtitulo-pagina">Bienvenido a tu panel de control</p>
+            </div>
+        </div>
+
+        <!-- Tarjetas de estadísticas -->
+        <div class="grid-estadisticas">
+            <!-- Tarjeta 1: Clientes -->
+            <div class="tarjeta-estadistica tarjeta-azul">
+                <div class="encabezado-tarjeta">
+                    <div class="info-tarjeta">
+                        <p class="titulo-tarjeta">Clientes</p>
+                        <h2 class="numero-tarjeta" id="total-clientes">24</h2>
+                        <p class="subtitulo-tarjeta">Nuevos</p>
+                    </div>
+                    <div class="icono-tarjeta icono-morado">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2: Citas Hoy -->
+            <div class="tarjeta-estadistica tarjeta-naranja">
+                <div class="encabezado-tarjeta">
+                    <div class="info-tarjeta">
+                        <p class="titulo-tarjeta">Citas hoy</p>
+                        <h2 class="numero-tarjeta" id="citas-hoy">2</h2>
+                        <p class="subtitulo-tarjeta">Pendientes</p>
+                    </div>
+                    <div class="icono-tarjeta icono-naranja">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 4: Ingresos -->
+            <div class="tarjeta-estadistica tarjeta-morado">
+                <div class="encabezado-tarjeta">
+                    <div class="info-tarjeta">
+                        <p class="titulo-tarjeta">Ingresos</p>
+                        <h2 class="numero-tarjeta" id="ingresos">28</h2>
+                        <p class="subtitulo-tarjeta">Este mes (miles)</p>
+                    </div>
+                    <div class="icono-tarjeta icono-morado-claro">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección inferior: Actividad y Próximas Citas -->
+        <div class="grid-contenido">
+            <!-- Actividad Reciente -->
+            <div class="seccion-blanca">
+                <h3 class="titulo-seccion">Actividad Reciente</h3>
+                
+                <div class="lista-actividad" id="lista-actividad">
+                    <!-- Item 1 -->
+                    <div class="item-actividad">
+                        <div class="indicador-actividad indicador-verde"></div>
+                        <div class="contenido-actividad">
+                            <p class="titulo-actividad">Cliente nuevo registrado</p>
+                            <p class="subtitulo-actividad">María González</p>
+                        </div>
+                        <span class="tiempo-actividad">Hace 2 horas</span>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="item-actividad">
+                        <div class="indicador-actividad indicador-naranja"></div>
+                        <div class="contenido-actividad">
+                            <p class="titulo-actividad">Cita programada</p>
+                            <p class="subtitulo-actividad">Carlos Ramírez</p>
+                        </div>
+                        <span class="tiempo-actividad">Hace 3 horas</span>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="item-actividad">
+                        <div class="indicador-actividad indicador-azul"></div>
+                        <div class="contenido-actividad">
+                            <p class="titulo-actividad">Documento subido</p>
+                            <p class="subtitulo-actividad">Ana López</p>
+                        </div>
+                        <span class="tiempo-actividad">Hace 5 horas</span>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="item-actividad">
+                        <div class="indicador-actividad indicador-morado"></div>
+                        <div class="contenido-actividad">
+                            <p class="titulo-actividad">Solicitud completada</p>
+                            <p class="subtitulo-actividad">Pedro Martínez</p>
+                        </div>
+                        <span class="tiempo-actividad">Hace 1 día</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximas Citas -->
+            <div class="seccion-blanca">
+                <h3 class="titulo-seccion">Próximas Citas</h3>
+                
+                <div class="lista-citas" id="lista-citas">
+                    <!-- Cita 1 -->
+                    <div class="item-cita">
+                        <div class="info-cita">
+                            <p class="nombre-cliente">Roberto Sánchez</p>
+                            <p class="tipo-cita">Asesoría Fiscal</p>
+                            <p class="hora-cita">10:00 AM</p>
+                        </div>
+                        <span class="etiqueta-cita etiqueta-hoy">Hoy</span>
+                    </div>
+
+                    <!-- Cita 2 -->
+                    <div class="item-cita">
+                        <div class="info-cita">
+                            <p class="nombre-cliente">Laura Hernández</p>
+                            <p class="tipo-cita">Revisión de documentos</p>
+                            <p class="hora-cita">2:30 PM</p>
+                        </div>
+                        <span class="etiqueta-cita etiqueta-hoy">Hoy</span>
+                    </div>
+
+                    <!-- Cita 3 -->
+                    <div class="item-cita">
+                        <div class="info-cita">
+                            <p class="nombre-cliente">Miguel Torres</p>
+                            <p class="tipo-cita">Declaración anual</p>
+                            <p class="hora-cita">11:00 AM</p>
+                        </div>
+                        <span class="etiqueta-cita etiqueta-manana">Mañana</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

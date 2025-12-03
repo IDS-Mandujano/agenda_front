@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesorías - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Asesorias.css">
+    <script src="../js/Asesorias.js" defer></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-contenedor">
+            <a href="../index.html" class="navbar-logo">
+                <img src="../src/Logo_Sin_Fondo.png" alt="AFGCORPORACIÓN" class="logo-imagen">
+                <span class="logo-text">AFGCORPORACIÓN</span>
+            </a>
+            
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="../index.html" class="nav-link">
+                    <img src="../src/Inicio.png" alt="Inicio" class="icono-nav">
+                    Inicio
+                </a></li>
+                <li><a href="Conocenos.html" class="nav-link">
+                    <img src="../src/Contadores.png" alt="Conócenos" class="icono-nav">
+                    Conócenos
+                </a></li>
+                <li><a href="Blog.html" class="nav-link">
+                    <img src="../src/Talleres.png" alt="Blog" class="icono-nav">
+                    Blog
+                </a></li>
+                <li><a href="Asesorias.html" class="nav-link activo">
+                    <img src="../src/Calendario.png" alt="Asesorías" class="icono-nav">
+                    Asesorías
+                </a></li>
+                 <li><a href="../paginas/Rol_Usuario.html" class="nav-link">
+                    <img src="../src/Sesion.png" alt="Sesion" class="icono-nav">
+                    Iniciar sesión
+                </a></li>
+            </ul>
+            
+            <!-- Botón hamburguesa para móvil -->
+            <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
+                <span class="linea-hamburguesa"></span>
+                <span class="linea-hamburguesa"></span>
+                <span class="linea-hamburguesa"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Overlay oscuro -->
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-asesorias">
+        <div class="hero-contenido">
+            <h1 class="hero-titulo">Nuestras Asesorías</h1>
+            <p class="hero-descripcion">
+                Servicios profesionales especializados adaptados a las necesidades de tu negocio
+            </p>
+        </div>
+    </section>
+
+    <!-- Sección de Asesorías -->
+    <section class="seccion-asesorias">
+        <div class="contenedor-asesorias">
+            
+            <!-- Asesoría Fiscal -->
+            <div class="tarjeta-asesoria">
+                <div class="encabezado-asesoria">
+                    <div class="icono-asesoria icono-fiscal">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <line x1="10" y1="9" x2="8" y2="9"></line>
+                        </svg>
+                    </div>
+                    <div class="info-encabezado">
+                        <h3 class="titulo-asesoria">Asesoría Fiscal</h3>
+                        <p class="descripcion-asesoria">Consultoría especializada en cumplimiento fiscal, declaraciones y optimización tributaria</p>
+                    </div>
+                </div>
+
+                <div class="lista-caracteristicas">
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Revisión de obligaciones fiscales</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Estrategias de optimización de impuestos</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Atención de requerimientos del SAT</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Planeación fiscal anual</span>
+                    </div>
+                </div>
+
+                <div class="pie-tarjeta">
+                    <div class="precio-asesoria">
+                        <span class="desde">Desde</span>
+                        <span class="monto">$5,000</span>
+                        <span class="periodo">mes</span>
+                    </div>
+                    <button class="boton-mas-informacion" data-asesoria="fiscal">
+                        Más información
+                    </button>
+                </div>
+            </div>
+
+            <!-- Asesoría Contable -->
+            <div class="tarjeta-asesoria">
+                <div class="encabezado-asesoria">
+                    <div class="icono-asesoria icono-contable">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <div class="info-encabezado">
+                        <h3 class="titulo-asesoria">Asesoría Contable</h3>
+                        <p class="descripcion-asesoria">Servicios contables completos adaptados a las necesidades de tu negocio</p>
+                    </div>
+                </div>
+
+                <div class="lista-caracteristicas">
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Registro de operaciones contables</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Estados financieros mensuales</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Análisis de costos y gastos</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Conciliaciones bancarias</span>
+                    </div>
+                </div>
+
+                <div class="pie-tarjeta">
+                    <div class="precio-asesoria">
+                        <span class="desde">Desde</span>
+                        <span class="monto">$4,500</span>
+                        <span class="periodo">mes</span>
+                    </div>
+                    <button class="boton-mas-informacion" data-asesoria="contable">
+                        Más información
+                    </button>
+                </div>
+            </div>
+
+            <!-- Asesoría en Nómina -->
+            <div class="tarjeta-asesoria">
+                <div class="encabezado-asesoria">
+                    <div class="icono-asesoria icono-nomina">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="info-encabezado">
+                        <h3 class="titulo-asesoria">Asesoría en Nómina</h3>
+                        <p class="descripcion-asesoria">Gestión integral de nómina y recursos humanos con cumplimiento legal</p>
+                    </div>
+                </div>
+
+                <div class="lista-caracteristicas">
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Cálculo y dispersión de nómina</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Timbrado de recibos CFDI</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Cálculo de prestaciones</span>
+                    </div>
+                    <div class="item-caracteristica">
+                        <svg class="icono-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Manejo de auditorías IMSS</span>
+                    </div>
+                </div>
+
+                <div class="pie-tarjeta">
+                    <div class="precio-asesoria">
+                        <span class="desde">Desde</span>
+                        <span class="monto">$3,800</span>
+                        <span class="periodo">mes</span>
+                    </div>
+                    <button class="boton-mas-informacion" data-asesoria="nomina">
+                        Más información
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal de Contacto -->
+    <div id="modal-contacto" class="modal-overlay">
+        <div class="modal-contacto">
+            <button class="cerrar-modal" id="cerrar-modal">&times;</button>
+            
+            <div class="modal-header">
+                <div class="icono-modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <h3 class="titulo-modal">Solicitar Información</h3>
+                <p class="subtitulo-modal" id="nombre-asesoria"></p>
+            </div>
+
+            <form class="formulario-contacto" id="form-contacto">
+                <div class="grupo-formulario">
+                    <label class="label-formulario">Nombre completo *</label>
+                    <input type="text" class="input-formulario" id="input-nombre" placeholder="Ej: Juan Pérez" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label class="label-formulario">Correo electrónico *</label>
+                    <input type="email" class="input-formulario" id="input-email" placeholder="correo@ejemplo.com" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label class="label-formulario">Teléfono *</label>
+                    <input type="tel" class="input-formulario" id="input-telefono" placeholder="(961) 123-4567" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label class="label-formulario">Empresa</label>
+                    <input type="text" class="input-formulario" id="input-empresa" placeholder="Nombre de tu empresa">
+                </div>
+
+                <div class="grupo-formulario">
+                    <label class="label-formulario">¿Tienes conocimiento del tema? *</label>
+                    <select class="select-formulario" id="select-nivel" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="ninguno">No tengo conocimiento</option>
+                        <option value="basico">Conocimiento básico</option>
+                        <option value="intermedio">Conocimiento intermedio</option>
+                        <option value="avanzado">Conocimiento avanzado</option>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label class="label-formulario">Mensaje</label>
+                    <textarea class="textarea-formulario" id="input-mensaje" rows="4" placeholder="Cuéntanos sobre tus necesidades..."></textarea>
+                </div>
+
+                <div class="botones-formulario">
+                    <button type="button" class="boton-cancelar" id="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="boton-enviar">Enviar solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-contenido">
+            <p>&copy; 2025 AFGCORPORACIÓN. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

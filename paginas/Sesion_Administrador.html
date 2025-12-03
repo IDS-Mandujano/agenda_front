@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- ===== META BÁSICOS ===== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- ===== SEO ===== -->
+    <title>Iniciar Sesión - Administrador | AFGCORPORACIÓN</title>
+    <meta name="description" content="Panel de administración AFGCORPORACIÓN. Acceso exclusivo para administradores del sistema.">
+    <meta name="keywords" content="administrador, admin, login, afgcorporación, panel control">
+    <meta name="author" content="AFGCORPORACIÓN">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- ===== OPEN GRAPH ===== -->
+    <meta property="og:title" content="Panel de Administración - AFGCORPORACIÓN">
+    <meta property="og:description" content="Acceso al panel de control administrativo">
+    <meta property="og:image" content="../src/Logo.png">
+    <meta property="og:type" content="website">
+    
+    <!-- ===== FAVICON ===== -->
+    <link rel="icon" type="image/png" href="../src/favicon.png">
+    <link rel="apple-touch-icon" href="../src/apple-touch-icon.png">
+    
+    <!-- ===== TEMA COLOR ===== -->
+    <meta name="theme-color" content="#0a5c7a">
+    
+    <!-- ===== STYLESHEETS ===== -->
+    <link rel="stylesheet" href="../estilos/Sesion_Administrador.css">
+    
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="../js/Sesion_Administrador.js" defer></script>
+</head>
+<body>
+    <!-- ===== BOTÓN REGRESAR (FUERA DEL CONTENEDOR) ===== -->
+    <a href="../paginas/Rol_Usuario.html" class="boton-regresar" aria-label="Regresar a selección de rol">
+        <img src="../src/Salida.png" alt="Regresar" class="icono-regresar">
+    </a>
+
+    <!-- ===== CONTENEDOR PRINCIPAL ===== -->
+    <div class="contenedor">
+        <!-- Panel Izquierdo -->
+        <div class="panel-izquierdo">
+            <div class="circulo-perfil">
+                <img src="../src/Logo.png" alt="Logo AFGCORPORACIÓN - Panel Administrador" class="imagen-perfil" loading="lazy">
+            </div>
+        </div>
+        
+        <!-- Panel Derecho -->
+        <div class="panel-derecho">
+            <!-- Mensaje de Bienvenida -->
+            <div class="mensaje-bienvenida">
+                <h2 class="titulo-bienvenida">¡Bienvenido, Administrador!</h2>
+                <p class="subtitulo-bienvenida">Accede al panel de control del sistema</p>
+            </div>
+
+            <h1>Iniciar sesión</h1>
+            
+            <!-- Formulario -->
+            <form class="formulario-login" id="login-form" novalidate>
+                <!-- Campo Email -->
+                <div class="grupo-campo">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email"
+                        placeholder="Ingresa tu correo electrónico"
+                        autocomplete="email"
+                        required
+                        aria-required="true"
+                        aria-describedby="email-error"
+                    >
+                    <span id="email-error" class="mensaje-error-campo" role="alert"></span>
+                </div>
+                
+                <!-- Campo Contraseña -->
+                <div class="grupo-campo">
+                    <label for="password">Contraseña</label>
+                    <div class="contenedor-password">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            placeholder="Ingresa tu contraseña"
+                            autocomplete="current-password"
+                            required
+                            aria-required="true"
+                            aria-describedby="password-error"
+                        >
+                        <button 
+                            type="button" 
+                            class="boton-toggle-password" 
+                            id="toggle-password-btn"
+                            aria-label="Mostrar u ocultar contraseña">
+                            <svg id="icono-ojo" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <span id="password-error" class="mensaje-error-campo" role="alert"></span>
+                </div>
+
+                <!-- Enlace Olvidaste Contraseña -->
+                <div class="contenedor-olvido">
+                    <a href="../paginas/Recuperar_Password.html" class="enlace-olvido">
+                        ¿Olvidaste tu contraseña? <span class="texto-destacado">clic aquí</span>
+                    </a>
+                </div>
+
+                <!-- Mensaje de Error General -->
+                <p id="mensaje-error" class="mensaje-error-general" role="alert" aria-live="polite"></p>
+                
+                <!-- Botón Submit -->
+                <button type="submit" class="boton-enviar" id="btn-submit">
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

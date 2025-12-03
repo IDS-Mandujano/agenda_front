@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Solicitudes - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Control_Solicitudes_Asesor.css">
+    <script src="../js/Control_Solicitudes_Asesor.js" defer></script>
+</head>
+<body>
+    <button class="boton-hamburguesa" id="boton-hamburguesa" aria-label="Abrir menú">
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+    </button>
+
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <aside class="menu-lateral" id="menu-lateral">
+        <nav class="navegacion-menu">
+            <a href="Dashboard_Asesor.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span class="texto-menu">Inicio</span>
+            </a>
+            <a href="Perfil_Asesor.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="texto-menu">Perfil</span>
+            </a>
+            <a href="Control_Solicitudes_Asesor.html" class="item-menu activo">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span class="texto-menu">Control de solicitudes</span>
+            </a>
+            <a href="Historial_Asesorias_Asesor.html" class="item-menu">
+                <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span class="texto-menu">Historial de asesorías</span>
+            </a>
+        </nav>
+
+        <a href="../paginas/Rol_Usuario.html" class="item-menu item-logout" id="logout-button">
+            <svg class="icono-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span class="texto-menu">Cerrar Sesión</span>
+        </a>
+    </aside>
+
+    <main class="contenido-principal">
+        <div class="encabezado-control">
+            <h1 class="titulo-pagina">Control de Solicitudes</h1>
+            <p class="subtitulo-pagina">Visualiza las solicitudes de tus clientes</p>
+        </div>
+
+        <div class="contenedor-tabla">
+            <table class="tabla-solicitudes">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Tema a Tratar</th>
+                        <th>Fecha y Hora</th>
+                        <th>Modalidad</th> <th>Estado</th>
+                        <th>Acciones</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-solicitudes">
+                    <tr class="fila-vacia">
+                        <td colspan="7"> 
+                            <div class="mensaje-vacio">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                </svg>
+                                <p>📋 No hay solicitudes pendientes</p>
+                                <p class="texto-secundario">Las solicitudes aparecerán aquí</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-detalles">
+        <div class="modal-contenido-detalles">
+            <button class="cerrar-modal" id="cerrar-modal-detalles">&times;</button>
+            
+            <div class="modal-header">
+                <h3 class="titulo-modal">Detalles de la Asesoría</h3>
+                <span class="badge-estado-modal" id="badge-estado-modal"></span>
+            </div>
+
+            <div class="modal-body" id="contenido-detalles">
+                </div>
+
+            <div class="modal-footer" id="modal-footer-acciones">
+                <button class="btn-cerrar-detalles" onclick="document.getElementById('modal-detalles').classList.remove('activo'); document.body.style.overflow = '';">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-confirmar">
+        <div class="modal-alerta">
+            <div class="modal-icono icono-info">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 class="modal-titulo">Confirmar acción</h3>
+            <p class="modal-texto">¿Estás seguro que deseas continuar con esta acción?</p>
+            <div class="modal-botones">
+                <button class="btn-modal btn-cancelar-modal" id="btn-cancelar-confirmar">Cancelar</button>
+                <button class="btn-modal btn-aceptar-modal" id="btn-aceptar-confirmar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-rechazar">
+        <div class="modal-alerta">
+            <div class="modal-icono icono-advertencia">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <h3 class="modal-titulo">¿Estás seguro?</h3>
+            <p class="modal-texto">¿Estás seguro de que deseas cancelar? No se guardarán tus datos.</p>
+            <div class="modal-botones">
+                <button class="btn-modal btn-volver" id="btn-volver-rechazar">Volver</button>
+                <button class="btn-modal btn-si-cancelar" id="btn-si-rechazar">Sí, cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="alerta-exito" id="alerta-confirmar">
+        <div class="alerta-contenido">
+            <div class="alerta-icono">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <p class="alerta-titulo">Solicitud confirmada correctamente</p>
+            <button class="alerta-cerrar" id="cerrar-alerta-confirmar">×</button>
+        </div>
+    </div>
+
+    <div class="alerta-cancelar" id="alerta-rechazar">
+        <div class="alerta-contenido">
+            <p class="alerta-titulo">Solicitud cancelada</p>
+            <button class="alerta-cerrar" id="cerrar-alerta-rechazar">×</button>
+        </div>
+    </div>
+</body>
+</html>

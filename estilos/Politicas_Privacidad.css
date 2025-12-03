@@ -1,0 +1,501 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background: linear-gradient(135deg, #085878 0%, #085878 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-contenedor {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.logo-imagen {
+    height: 45px;
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.icono-nav {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link.activo {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+}
+
+.boton-hamburguesa {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.boton-hamburguesa:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.linea-hamburguesa {
+    width: 22px;
+    height: 2px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.boton-hamburguesa.activo .linea-hamburguesa:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.boton-hamburguesa.activo .linea-hamburguesa:nth-child(2) {
+    opacity: 0;
+}
+
+.boton-hamburguesa.activo .linea-hamburguesa:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== OVERLAY ===== */
+.overlay-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.overlay-menu.activo {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.contenedor-principal {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.contenido-politicas {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* ===== ENCABEZADO ===== */
+.encabezado-politicas {
+    background: linear-gradient(135deg, #005D89 0%, #005D89 100%);
+    color: white;
+    padding: 50px 40px;
+    text-align: center;
+}
+
+.encabezado-politicas h1 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.fecha-actualizacion {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+/* ===== SECCIÓN DE CONTENIDO ===== */
+.seccion-contenido {
+    padding: 40px;
+}
+
+.introduccion {
+    background-color: #e6f7fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    border-left: 4px solid #005D89;
+}
+
+.introduccion p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #2c3e50;
+}
+
+/* ===== ARTÍCULOS ===== */
+.articulo-politica {
+    margin-bottom: 40px;
+}
+
+.articulo-politica h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #d1f0f7;
+}
+
+.articulo-politica h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.articulo-politica p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.articulo-politica ul,
+.articulo-politica ol {
+    margin-left: 25px;
+    margin-bottom: 20px;
+}
+
+.articulo-politica li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.articulo-politica strong {
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.articulo-politica a {
+    color: #005D89;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.articulo-politica a:hover {
+    color: #3f8fa3;
+    text-decoration: underline;
+}
+
+/* ===== INFORMACIÓN DE CONTACTO ===== */
+.info-contacto {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.info-contacto p {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.info-contacto a {
+    color: #005D89;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.info-contacto a:hover {
+    text-decoration: underline;
+}
+
+/* ===== SECCIÓN DE ACEPTACIÓN ===== */
+.aceptacion {
+    background-color: #fff3cd;
+    border: 2px solid #ffc107;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.aceptacion p {
+    font-size: 15px;
+    color: #856404;
+    line-height: 1.6;
+}
+
+/* ===== BOTONES DE ACCIÓN ===== */
+.botones-accion {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 40px;
+    background-color: #f8f9fa;
+}
+
+.btn-primario,
+.btn-secundario {
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primario {
+    background: linear-gradient(135deg, #005D89 0%, #005D89 100%);
+    color: white;
+}
+
+.btn-primario:hover {
+    background: linear-gradient(135deg, #004a6d 0%, #004a6d 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 93, 137, 0.3);
+}
+
+.btn-secundario {
+    background-color: white;
+    color: #005D89;
+    border: 2px solid #005D89;
+}
+
+.btn-secundario:hover {
+    background-color: #005D89;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 93, 137, 0.2);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 40px 20px;
+    margin-top: 60px;
+}
+
+.footer-contenido {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-contenido p {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+.footer-enlaces {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.footer-enlaces a {
+    color: #4da8be;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.footer-enlaces a:hover {
+    color: #6bc1d6;
+    text-decoration: underline;
+}
+
+.footer-enlaces span {
+    color: #666;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .boton-hamburguesa {
+        display: flex !important;
+    }
+    
+    .navbar-menu {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: linear-gradient(135deg, #3f8fa3 0%, #4da8be 100%);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 5px;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+    }
+
+    .navbar-menu.abierto {
+        left: 0;
+    }
+
+    .contenedor-principal {
+        padding: 20px 15px;
+    }
+
+    .encabezado-politicas {
+        padding: 35px 25px;
+    }
+
+    .encabezado-politicas h1 {
+        font-size: 28px;
+    }
+
+    .seccion-contenido {
+        padding: 25px 20px;
+    }
+
+    .articulo-politica h2 {
+        font-size: 22px;
+    }
+
+    .articulo-politica h3 {
+        font-size: 18px;
+    }
+
+    .botones-accion {
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+
+    .btn-primario,
+    .btn-secundario {
+        width: 100%;
+        text-align: center;
+    }
+
+    .articulo-politica ul,
+    .articulo-politica ol {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .encabezado-politicas h1 {
+        font-size: 24px;
+    }
+
+    .encabezado-politicas {
+        padding: 30px 20px;
+    }
+
+    .seccion-contenido {
+        padding: 20px 15px;
+    }
+
+    .articulo-politica h2 {
+        font-size: 20px;
+    }
+
+    .articulo-politica h3 {
+        font-size: 17px;
+    }
+
+    .articulo-politica p,
+    .articulo-politica li {
+        font-size: 14px;
+    }
+
+    .navbar-contenedor {
+        padding: 15px 20px;
+    }
+
+    .logo-text {
+        font-size: 16px;
+    }
+}
+
+/* ===== SCROLLBAR PERSONALIZADO ===== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

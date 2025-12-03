@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Blog.css">
+    <script src="../js/Blog.js" defer></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-contenedor">
+            <a href="../index.html" class="navbar-logo">
+                <img src="../src/Logo_Sin_Fondo.png" alt="AFGCORPORACIÓN">
+                <span class="logo-text">AFGCORPORACIÓN</span>
+            </a>
+            
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="../Index.html" class="nav-link">
+                    <img src="../src/Inicio.png" alt="Conócenos" class="icono-nav">
+                    Inicio
+                </a></li>
+                <li><a href="Conocenos.html" class="nav-link">
+                    <img src="../src/Contadores.png" alt="Conócenos" class="icono-nav">
+                    Conócenos
+                </a></li>
+                <li><a href="Blog.html" class="nav-link activo">
+                    <img src="../src/Talleres.png" alt="Blog" class="icono-nav">
+                    Blog
+                </a></li>
+                <li><a href="Asesorias.html" class="nav-link">
+                    <img src="../src/Calendario.png" alt="Asesorías" class="icono-nav">
+                    Asesorías
+                </a></li>
+                 <li><a href="../paginas/Rol_Usuario.html" class="nav-link">
+                    <img src="../src/Sesion.png" alt="Sesion" class="icono-nav">
+                    Iniciar sesión
+                </a></li>
+            </ul>
+            
+            <!-- Botón hamburguesa para móvil -->
+            <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
+                <span class="linea-hamburguesa"></span>
+                <span class="linea-hamburguesa"></span>
+                <span class="linea-hamburguesa"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Overlay oscuro -->
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <!-- Sección de Publicaciones -->
+    <section class="seccion-publicaciones">
+        <div class="contenedor">
+            <h2 class="titulo-seccion">📰 Nuestro Blog</h2>
+            <p class="subtitulo-seccion">Mantente informado con las últimas noticias y actualizaciones</p>
+            
+            <div class="grid-publicaciones" id="grid-publicaciones">
+                <!-- Las publicaciones se cargarán aquí dinámicamente -->
+                <div class="mensaje-vacio">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    <p>📄 No hay publicaciones disponibles</p>
+                    <p class="texto-secundario">Próximamente agregaremos nuevos artículos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal: Ver publicación completa -->
+    <div id="modal-publicacion" class="modal-overlay">
+        <div class="modal-detalles">
+            <button class="cerrar-modal-detalles" id="cerrar-modal">&times;</button>
+            <div class="contenido-modal-detalles" id="contenido-modal">
+                <!-- El contenido se generará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-contenido">
+            <p>&copy; 2025 AFGCORPORACIÓN. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

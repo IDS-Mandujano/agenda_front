@@ -1,0 +1,706 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    /* Se mantiene el fondo de la página principal */
+    background: linear-gradient(135deg, #005D89 0%, #005D89 100%);
+    min-height: 100vh;
+}
+
+/* ===== BOTÓN HAMBURGUESA (Nuevo estilo) ===== */
+.boton-hamburguesa {
+    display: none; /* Se activa en responsive */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1001; /* Sobre el menú y overlay */
+}
+
+.boton-hamburguesa:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.linea-hamburguesa {
+    width: 22px;
+    height: 2px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.boton-hamburguesa.activo .linea-hamburguesa:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.boton-hamburguesa.activo .linea-hamburguesa:nth-child(2) {
+    opacity: 0;
+}
+
+.boton-hamburguesa.activo .linea-hamburguesa:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== OVERLAY (Nuevo estilo) ===== */
+.overlay-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    display: none; /* Se activa en responsive */
+}
+
+.overlay-menu.activo {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Encabezado (Nuevo estilo de "Conócenos") */
+.encabezado {
+    /* Estilo de .navbar */
+    background: linear-gradient(135deg, #085878 100%, #085878 0%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0; /* Reseteo del padding original */
+}
+
+.contenedor-encabezado {
+    /* Estilo de .navbar-contenedor */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    /* Estilo de .navbar-logo */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    z-index: 1001;
+    text-decoration: none;
+}
+
+.icono-logo {
+    /* Estilo de .logo-imagen */
+    height: 45px;
+    width: auto;
+    /* Eliminados estilos de círculo naranja */
+    border-radius: 0;
+    overflow: visible;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.texto-logo {
+    /* Estilo de .logo-text */
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.icono-nav {
+    /* Estilo de .icono-nav */
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.navegacion {
+    /* Estilo de .navbar-menu */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    list-style: none;
+}
+
+/* Combinados .enlace-nav y .boton-iniciar para que usen el estilo .nav-link */
+.enlace-nav,
+.boton-iniciar {
+    /* Estilo de .nav-link */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: transparent; /* Asegura que .boton-iniciar no sea blanco */
+}
+
+.enlace-nav:hover,
+.boton-iniciar:hover {
+    /* Estilo de .nav-link:hover */
+    background-color: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+    transform: none; /* Anula el transform de .boton-iniciar:hover */
+}
+
+/*
+    A PARTIR DE AQUÍ, EL RESTO DEL CSS DE LA PÁGINA PRINCIPAL SE MANTIENE
+*/
+
+/* Sección Hero */
+.seccion-hero {
+    padding: 60px 30px;
+}
+
+.contenedor-hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.contenido-izquierdo {
+    flex: 1;
+    color: white;
+}
+
+.etiqueta-seccion {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.titulo-principal {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.descripcion {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    opacity: 0.95;
+}
+
+/* --- ESTILOS PARA .botones-accion AUNQUE YA NO SE USEN --- */
+/* (Se quedan aquí por si decides volver a ponerlos) */
+.botones-accion {
+    display: flex;
+    gap: 15px;
+}
+
+.botones-accion a {
+    text-decoration: none;
+}
+
+.boton-primario,
+.boton-secundario {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.boton-primario {
+    background-color: white;
+    color: #1a6b8a;
+}
+
+.boton-primario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+.boton-secundario {
+    background-color: white;
+    color: #1a6b8a;
+    border: none;
+}
+
+.boton-secundario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* Tarjeta de Logo */
+.contenido-derecho {
+    flex: 1;
+}
+
+.tarjeta-logo {
+    background-color: white;
+    border-radius: 20px;
+    padding: 60px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px;
+}
+
+.imagen-logo {
+    width: 280px;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Sección de Servicios */
+.seccion-servicios {
+    padding: 40px 30px;
+}
+
+/* --- MODIFICADO PARA 2 TARJETAS --- */
+.contenedor-servicios {
+    max-width: 800px; /* Reducido de 1200px para centrar 2 tarjetas */
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Cambiado de 3 a 2 */
+    gap: 30px;
+}
+/* --- FIN DE LA MODIFICACIÓN --- */
+
+/* Estilos para enlaces de tarjetas (AHORA NO USADO, PERO SE QUEDA) */
+.enlace-tarjeta {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.enlace-tarjeta:hover {
+    transform: translateY(-8px);
+}
+
+/* Estilo de tarjeta (AHORA SIN ENLACE) */
+.tarjeta-servicio {
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100%;
+    /* Añadimos transiciones para el hover (aunque no sea enlace) */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+/* Efecto hover ahora directo en la tarjeta */
+.tarjeta-servicio:hover {
+    transform: translateY(-8px);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.icono-servicio {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.tarjeta-servicio:hover .icono-servicio {
+    transform: scale(1.1);
+}
+
+.titulo-servicio {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.descripcion-servicio {
+    font-size: 14px;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+/* Sección CTA */
+.seccion-cta {
+    padding: 40px 30px 60px;
+}
+
+.contenedor-cta {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 50px 40px;
+    text-align: center;
+    color: #1a6b8a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.etiqueta-cta {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    color: #1a6b8a;
+}
+
+.titulo-cta {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #1a6b8a;
+}
+
+.descripcion-cta {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    opacity: 0.85;
+    color: #1a6b8a;
+}
+
+.botones-cta {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Estilos para enlaces de botones CTA */
+.enlace-boton {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.boton-agendar,
+.boton-conocer {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.icono-boton {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.boton-agendar {
+    background-color: #1a6b8a;
+    color: white;
+}
+
+.boton-agendar:hover {
+    background-color: #155770;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 107, 138, 0.3);
+}
+
+.boton-conocer {
+    background-color: transparent;
+    color: #1a6b8a;
+    border: 2px solid #1a6b8a;
+}
+
+.boton-conocer:hover {
+    background-color: rgba(26, 107, 138, 0.1);
+    transform: translateY(-2px);
+}
+
+/* ===== FOOTER (NUEVO) ===== */
+.footer {
+    background-color: #085878; /* Un tono oscuro del gradiente del body */
+    color: white;
+    padding: 50px 30px 20px;
+    margin-top: 40px; /* Separación de la sección CTA */
+}
+
+.contenedor-footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-columna h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.footer-columna p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.footer-columna ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-columna li {
+    margin-bottom: 10px;
+}
+
+.footer-columna a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+}
+
+.footer-columna a:hover {
+    opacity: 1;
+}
+
+.footer-copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    /* Estilos del contenido (sin cambios) */
+    .contenedor-hero {
+        gap: 40px;
+    }
+    
+    .titulo-principal {
+        font-size: 40px;
+    }
+    
+    .tarjeta-logo {
+        padding: 40px;
+        min-height: 300px;
+    }
+    
+    .imagen-logo {
+        width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Estilos del menú (NUEVOS) */
+    .overlay-menu {
+        display: block; /* Se activa el overlay */
+    }
+    
+    .boton-hamburguesa {
+        display: flex !important; /* Se muestra el botón hamburguesa */
+    }
+    
+    .navegacion {
+        /* Estilo de .navbar-menu responsive */
+        position: fixed;
+        left: -100%;
+        top: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: linear-gradient(135deg, #025e75 0%, #4da8be 100%);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 5px;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        align-items: flex-start; /* Añadido para alinear texto */
+    }
+    
+    .navegacion.abierto {
+        left: 0;
+    }
+
+    /* Estilos de los enlaces en móvil */
+    .enlace-nav,
+    .boton-iniciar {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 8px;
+    }
+    
+    .boton-iniciar {
+        justify-content: flex-start; /* Alineado igual que .enlace-nav */
+        margin-top: 0; /* Sin margen extra */
+    }
+
+    /* Estilos del contenido (Originales) */
+    .contenedor-hero {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    
+    .botones-accion {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* MODIFICADO: Ajuste para las 2 tarjetas en tablet */
+    .contenedor-servicios {
+        max-width: 1fr;
+        grid-template-columns: 1fr;
+    }
+    
+    .titulo-principal {
+        font-size: 36px;
+    }
+    
+    .descripcion {
+        font-size: 16px;
+    }
+    
+    .tarjeta-logo {
+        padding: 40px;
+        min-height: 280px;
+    }
+    
+    .imagen-logo {
+        width: 200px;
+        max-height: 180px;
+    }
+    
+    .botones-cta {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .enlace-boton {
+        width: 100%;
+    }
+    
+    .boton-agendar,
+    .boton-conocer {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .contenedor-cta {
+        padding: 40px 30px;
+    }
+    
+    .titulo-cta {
+        font-size: 28px;
+    }
+
+    /* MODIFICADO: Footer Responsive */
+    .contenedor-footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor-encabezado {
+        padding: 15px 20px; /* Reducido de 15px 30px */
+    }
+    
+    .texto-logo {
+        font-size: 16px;
+    }
+    
+    .seccion-hero {
+        padding: 40px 20px;
+    }
+    
+    .titulo-principal {
+        font-size: 28px;
+    }
+    
+    .descripcion {
+        font-size: 15px;
+    }
+    
+    .botones-accion {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .boton-primario,
+    .boton-secundario {
+        width: 100%;
+    }
+    
+    .tarjeta-logo {
+        padding: 30px 25px;
+        min-height: 240px;
+    }
+    
+    .imagen-logo {
+        width: 180px;
+        max-height: 150px;
+    }
+    
+    .seccion-servicios {
+        padding: 30px 20px;
+    }
+    
+    .tarjeta-servicio {
+        padding: 25px 20px;
+    }
+    
+    /* MODIFICADO: Asegura que sea 1 columna */
+    .contenedor-servicios {
+        grid-template-columns: 1fr;
+    }
+
+    .seccion-cta {
+        padding: 30px 20px 50px;
+    }
+    
+    .contenedor-cta {
+        padding: 35px 25px;
+    }
+    
+    .titulo-cta {
+        font-size: 24px;
+    }
+    
+    .descripcion-cta {
+        font-size: 15px;
+    }
+}

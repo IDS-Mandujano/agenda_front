@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Administrador</title>
+    <link rel="stylesheet" href="../estilos/Perfil_Administrador.css">
+    <script src="../js/Perfil_Administrador.js" defer></script>
+</head>
+<body>
+    <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+    </button>
+
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <aside class="menu-lateral" id="menu-lateral">
+        <div class="contenedor-menu">
+            <a href="#" class="item-menu"> 
+                <img src="../src/Logo_Sin_Fondo.png" alt="Logo AFGCORPORACIÓN" class="icono-menu">
+                <span>AFGCORPORACIÓN</span>
+            </a>
+            <a href="../paginas/Perfil_Administrador.html" class="item-menu activo">
+                <img src="../src/Perfil.png" alt="Perfil" class="icono-menu">
+                <span>Perfil</span>
+            </a>
+            <a href="../paginas/Control_Usarios.html" class="item-menu">
+                <img src="../src/Contadores.png" alt="Usuarios" class="icono-menu">
+                <span>Control de usuarios</span>
+            </a>
+            <a href="../paginas/Blog_Admin.html" class="item-menu">
+                <img src="../src/Talleres.png" alt="Blog" class="icono-menu">
+                <span>Blog</span>
+            </a>
+            <a href="../paginas/Gestor_Pagos.html" class="item-menu">
+                <img src="../src/Pagos.png" alt="Pagos" class="icono-menu">
+                <span>Gestor de pagos</span>
+            </a>
+            <a href="../paginas/Control_Solicitudes.html" class="item-menu">
+                <img src="../src/Solicitudes.png" alt="Solicitudes" class="icono-menu">
+                <span>Control de solicitudes</span>
+            </a>
+            <a href="../paginas/Historial_Asesorias.html" class="item-menu">
+                <img src="../src/Historial.png" alt="Historial" class="icono-menu">
+                <span>Historial de asesorías</span>
+            </a>
+        </div>
+
+        <a href="../paginas/Rol_Usuario.html" class="item-menu item-logout" id="logout-button">
+            <img src="../src/Salida.png" alt="Cerrar Sesión" class="icono-menu">
+            <span>Cerrar Sesión</span>
+        </a>
+    </aside>
+
+    <main class="contenido-principal">
+        <div id="mi-notificacion" class="notificacion-banner">
+            <div class="notificacion-contenido">
+                <span class="notificacion-icono">&#10003;</span>
+                <span id="notificacion-mensaje"></span>
+            </div>
+            <span id="notificacion-cerrar" class="notificacion-cerrar">&times;</span>
+        </div>
+
+        <section class="seccion-perfil">
+            <div class="tarjeta-perfil">
+                <div class="foto-perfil">
+                    <img src="foto-perfil.png" alt="Perfil" class="imagen-perfil" id="imagen-perfil">
+                    <div class="overlay-foto">
+                        <label for="input-foto" class="boton-cambiar-foto">
+                            <img src="../src/Editar.png" alt="Cambiar foto" class="icono-cambiar">
+                            Cambiar foto
+                        </label>
+                        <input type="file" id="input-foto" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="info-basica">
+                    <h3 class="nombre-usuario">Cargando...</h3>
+                    <p class="rol-usuario">Administrador</p>
+                    <div class="etiquetas-estado">
+                        <span class="etiqueta etiqueta-activo">Activo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-estadisticas">
+            <div class="tarjeta-estadistica">
+                <div class="icono-estadistica icono-publicaciones">
+                    <img src="../src/Publicaciones.png" alt="Publicaciones" class="icono-tarjeta">
+                </div>
+                <div class="info-estadistica">
+                    <p class="numero-estadistica">0</p>
+                    <p class="label-estadistica">Publicaciones</p>
+                </div>
+            </div>
+            <div class="tarjeta-estadistica">
+                <div class="icono-estadistica icono-asesorias">
+                    <img src="../src/Asesorias.png" alt="Asesorías" class="icono-tarjeta">
+                </div>
+                <div class="info-estadistica">
+                    <p class="numero-estadistica">0</p>
+                    <p class="label-estadistica">Asesorías</p>
+                </div>
+            </div>
+            <div class="tarjeta-estadistica">
+                <div class="icono-estadistica icono-clientes">
+                    <img src="../src/Clientes.png" alt="Clientes" class="icono-tarjeta">
+                </div>
+                <div class="info-estadistica">
+                    <p class="numero-estadistica">3</p>
+                    <p class="label-estadistica">Clientes</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-informacion">
+            
+            <div class="columna-info">
+                <div class="encabezado-columna">
+                    <h3 class="titulo-columna">Datos Personales</h3>
+                    <button class="boton-editar" id="btn-editar-datos-personales">
+                        <img src="../src/Editar.png" alt="Editar" class="icono-editar-btn">
+                    </button>
+                </div>
+                
+                <div class="contenido-columna" id="contenido-datos-personales">
+                    <div class="campo-info">
+                        <img src="../src/Nombre.png" alt="Nombre" class="icono-campo">
+                        <div class="texto-campo">
+                            <p class="label-campo">Nombre completo</p>
+                            <p class="valor-campo" data-campo="nombre">...</p>
+                            <input type="text" class="input-edicion" data-campo="nombre" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="campo-info">
+                        <img src="../src/RFC.png" alt="RFC" class="icono-campo">
+                        <div class="texto-campo">
+                            <p class="label-campo">RFC</p>
+                            <p class="valor-campo" data-campo="rfc">...</p>
+                            <input type="text" class="input-edicion" data-campo="rfc" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="campo-info">
+                        <img src="../src/RFC.png" alt="CURP" class="icono-campo">
+                        <div class="texto-campo">
+                            <p class="label-campo">CURP</p>
+                            <p class="valor-campo" data-campo="curp">...</p>
+                            <input type="text" class="input-edicion" data-campo="curp" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contenedor-botones" id="botones-datos-personales" style="display: none;">
+                    <button class="boton-cancelar" id="btn-cancelar-datos-personales">Cancelar</button>
+                    <button class="boton-guardar" id="btn-guardar-datos-personales">Guardar cambios</button>
+                </div>
+            </div>
+
+            <div class="columna-info">
+                <div class="encabezado-columna">
+                    <h3 class="titulo-columna">Información de Contacto</h3>
+                    <button class="boton-editar" id="btn-editar-informacion-contacto">
+                        <img src="../src/Editar.png" alt="Editar" class="icono-editar-btn">
+                    </button>
+                </div>
+                
+                <div class="contenido-columna" id="contenido-informacion-contacto">
+                    <div class="campo-info">
+                        <img src="../src/Telefono.png" alt="Teléfono" class="icono-campo">
+                        <div class="texto-campo">
+                            <p class="label-campo">Teléfono Principal</p>
+                            <p class="valor-campo" data-campo="telefono">...</p>
+                            <input type="tel" class="input-edicion" data-campo="telefono" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="campo-info">
+                        <img src="../src/Nombre.png" alt="Email" class="icono-campo">
+                        <div class="texto-campo">
+                            <p class="label-campo">Correo Electrónico</p>
+                            <p class="valor-campo" data-campo="email">...</p>
+                            <input type="email" class="input-edicion" data-campo="email" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contenedor-botones" id="botones-informacion-contacto" style="display: none;">
+                    <button class="boton-cancelar" id="btn-cancelar-informacion-contacto">Cancelar</button>
+                    <button class="boton-guardar" id="btn-guardar-informacion-contacto">Guardar cambios</button>
+                </div>
+            </div>
+        </section>
+
+        <div id="modal-confirmacion" class="modal-overlay">
+            <div class="modal-contenido">
+                <h3 class="modal-titulo">¿Estás seguro?</h3>
+                <p class="modal-mensaje">¿Estás seguro de que deseas cancelar? No se guardarán los datos.</p>
+                <div class="modal-botones">
+                    <button class="modal-btn-volver" id="btn-volver">Volver</button>
+                    <button class="modal-btn-cancelar" id="btn-confirmar-cancelar">Sí, cancelar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

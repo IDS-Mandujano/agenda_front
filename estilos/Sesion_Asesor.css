@@ -1,0 +1,703 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== VARIABLES CSS ===== */
+:root {
+    --color-primario: #005D89;
+    --color-secundario: #005D89;
+    --color-acento: #f5a623;
+    --color-boton: #5B4DE8;
+    --color-boton-hover: #5B4DE8;
+    --color-texto: #1a1a1a;
+    --color-texto-secundario: #666;
+    --color-texto-destacado: #1a6b8a;
+    --color-borde: #d1d1d1;
+    --color-fondo: #f5f5f5;
+    --color-error: #ef4444;
+    --radio-borde: 8px;
+    --sombra-suave: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --sombra-media: 0 10px 40px rgba(0, 0, 0, 0.1);
+    --transicion: all 0.3s ease;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--color-fondo);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    position: relative;
+}
+
+/* ===== BOTÓN DE REGRESO ===== */
+.boton-regresar {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(26, 107, 138, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transicion);
+    z-index: 1000;
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.boton-regresar:hover {
+    background-color: rgba(26, 107, 138, 0.2);
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+}
+
+.boton-regresar:active {
+    transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+}
+
+.boton-regresar:focus {
+    outline: 2px solid var(--color-primario);
+    outline-offset: 2px;
+}
+
+.icono-regresar {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.contenedor {
+    display: flex;
+    width: 900px;
+    min-height: 600px;
+    max-height: 90vh;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--sombra-media);
+}
+
+.panel-izquierdo {
+    flex: 1;
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.circulo-perfil {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--color-acento);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.imagen-perfil {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+.panel-derecho {
+    flex: 1;
+    padding: 50px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== MENSAJE DE BIENVENIDA ===== */
+.mensaje-bienvenida {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.titulo-bienvenida {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-texto-destacado);
+    margin-bottom: 8px;
+}
+
+.subtitulo-bienvenida {
+    font-size: 15px;
+    color: var(--color-texto-secundario);
+    font-weight: 400;
+}
+
+.titulo-formulario {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--color-texto);
+}
+
+/* ===== FORMULARIO ===== */
+.formulario-login {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.grupo-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    font-size: 16px;
+    transition: var(--transicion);
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input::placeholder {
+    color: #999;
+}
+
+.contenedor-password {
+    position: relative;
+    width: 100%;
+}
+
+.contenedor-password input {
+    padding-right: 50px;
+}
+
+.boton-toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-texto-secundario);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transicion);
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 4px;
+}
+
+.boton-toggle-password:hover {
+    color: var(--color-boton);
+    background-color: rgba(91, 95, 199, 0.05);
+}
+
+.boton-toggle-password:focus {
+    outline: 2px solid var(--color-boton);
+    outline-offset: 2px;
+}
+
+.boton-toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+
+input:focus {
+    border-color: var(--color-boton);
+    box-shadow: 0 0 0 3px rgba(91, 95, 199, 0.1);
+}
+
+input.error {
+    border-color: var(--color-error);
+}
+
+input.error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* ===== MENSAJES DE ERROR ===== */
+.error-message {
+    display: none;
+    font-size: 12px;
+    color: var(--color-error);
+    margin-top: 4px;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.mensaje-error-general {
+    display: none;
+    padding: 12px;
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--color-error);
+    border-radius: var(--radio-borde);
+    color: var(--color-error);
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.mensaje-error-general.show {
+    display: block;
+}
+
+/* ===== ENLACE OLVIDASTE CONTRASEÑA ===== */
+.contenedor-olvido {
+    text-align: center;
+    margin-top: -5px;
+}
+
+.enlace-olvido {
+    font-size: 14px;
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    transition: var(--transicion);
+    display: inline-block;
+}
+
+.enlace-olvido:hover {
+    color: var(--color-boton);
+}
+
+.enlace-olvido:focus {
+    outline: 2px solid var(--color-boton);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.texto-destacado {
+    color: var(--color-boton);
+    font-weight: 600;
+}
+
+/* ===== BOTÓN ENVIAR ===== */
+.boton-enviar {
+    margin-top: 10px;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--color-boton) 0%, var(--color-boton-hover) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radio-borde);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transicion);
+    min-height: 48px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.boton-enviar:hover {
+    transform: translateY(-2px);
+    -webkit-transform: translateY(-2px);
+    -ms-transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 95, 199, 0.3);
+}
+
+.boton-enviar:active {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+}
+
+.boton-enviar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    -webkit-transform: none;
+    -ms-transform: none;
+}
+
+.boton-enviar:focus {
+    outline: 2px solid var(--color-boton);
+    outline-offset: 2px;
+}
+
+/* ===== RESPONSIVE TABLET GRANDE (769px - 1024px) ===== */
+@media (max-width: 1024px) {
+    .contenedor {
+        width: 90%;
+        max-width: 800px;
+    }
+
+    .panel-derecho {
+        padding: 45px 40px;
+    }
+
+    .titulo-bienvenida {
+        font-size: 22px;
+    }
+
+    .titulo-formulario {
+        font-size: 28px;
+    }
+
+    .boton-regresar {
+        width: 48px;
+        height: 48px;
+    }
+
+    .icono-regresar {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* ===== RESPONSIVE TABLET (481px - 768px) ===== */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    .contenedor {
+        flex-direction: column;
+        width: 100%;
+        min-height: auto;
+        margin: 10px 0;
+    }
+    
+    .panel-izquierdo {
+        padding: 40px 20px;
+        min-height: 250px;
+    }
+    
+    .circulo-perfil {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .panel-derecho {
+        padding: 40px 30px;
+    }
+    
+    .boton-regresar {
+        top: 20px;
+        left: 20px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .icono-regresar {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .titulo-bienvenida {
+        font-size: 20px;
+    }
+    
+    .subtitulo-bienvenida {
+        font-size: 14px;
+    }
+
+    .titulo-formulario {
+        font-size: 26px;
+        margin-bottom: 25px;
+    }
+
+    .formulario-login {
+        gap: 18px;
+    }
+
+    input {
+        padding: 13px 16px;
+        font-size: 16px;
+    }
+
+    .contenedor-password input {
+        padding-right: 48px;
+    }
+
+    .boton-enviar {
+        padding: 13px;
+        font-size: 15px;
+    }
+}
+
+/* ===== RESPONSIVE MÓVIL GRANDE (376px - 480px) ===== */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .contenedor {
+        border-radius: 15px;
+        margin: 5px 0;
+    }
+
+    .panel-izquierdo {
+        padding: 30px 15px;
+        min-height: 220px;
+    }
+
+    .circulo-perfil {
+        width: 170px;
+        height: 170px;
+    }
+    
+    .panel-derecho {
+        padding: 35px 25px;
+    }
+    
+    .boton-regresar {
+        top: 15px;
+        left: 15px;
+        width: 42px;
+        height: 42px;
+    }
+    
+    .icono-regresar {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .mensaje-bienvenida {
+        margin-bottom: 20px;
+    }
+
+    .titulo-bienvenida {
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+    
+    .subtitulo-bienvenida {
+        font-size: 13px;
+    }
+
+    .titulo-formulario {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .formulario-login {
+        gap: 16px;
+    }
+
+    .grupo-campo {
+        gap: 6px;
+    }
+
+    label {
+        font-size: 13px;
+    }
+
+    input {
+        padding: 12px 14px;
+        font-size: 16px;
+        border-radius: 7px;
+    }
+
+    .contenedor-password input {
+        padding-right: 46px;
+    }
+
+    .boton-toggle-password {
+        right: 6px;
+        padding: 8px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .boton-toggle-password svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .enlace-olvido {
+        font-size: 13px;
+    }
+
+    .boton-enviar {
+        padding: 12px;
+        font-size: 14px;
+        margin-top: 8px;
+        border-radius: 7px;
+    }
+}
+
+/* ===== RESPONSIVE MÓVIL PEQUEÑO (≤ 375px) ===== */
+@media (max-width: 375px) {
+    .panel-izquierdo {
+        padding: 25px 10px;
+        min-height: 200px;
+    }
+
+    .circulo-perfil {
+        width: 150px;
+        height: 150px;
+    }
+
+    .panel-derecho {
+        padding: 30px 20px;
+    }
+
+    .boton-regresar {
+        top: 12px;
+        left: 12px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .icono-regresar {
+        width: 16px;
+        height: 16px;
+    }
+
+    .titulo-bienvenida {
+        font-size: 17px;
+    }
+
+    .titulo-formulario {
+        font-size: 22px;
+        margin-bottom: 18px;
+    }
+
+    input {
+        padding: 11px 12px;
+        font-size: 16px;
+    }
+
+    .boton-enviar {
+        padding: 11px;
+        font-size: 13px;
+    }
+}
+
+/* ===== LANDSCAPE (HORIZONTAL) EN MÓVIL ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+    }
+
+    .contenedor {
+        flex-direction: row;
+        max-height: 90vh;
+        height: auto;
+    }
+
+    .panel-izquierdo {
+        flex: 0.8;
+        padding: 20px 15px;
+    }
+
+    .circulo-perfil {
+        width: 150px;
+        height: 150px;
+    }
+
+    .panel-derecho {
+        flex: 1.2;
+        padding: 20px 30px;
+        overflow-y: auto;
+        max-height: 90vh;
+    }
+
+    .boton-regresar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .mensaje-bienvenida {
+        margin-bottom: 15px;
+    }
+
+    .titulo-bienvenida {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+
+    .subtitulo-bienvenida {
+        font-size: 12px;
+    }
+
+    .titulo-formulario {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .formulario-login {
+        gap: 12px;
+    }
+
+    input {
+        padding: 10px 12px;
+        font-size: 16px;
+    }
+
+    .boton-enviar {
+        padding: 10px;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .enlace-olvido {
+        font-size: 12px;
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== ALTO CONTRASTE ===== */
+@media (prefers-contrast: high) {
+    input,
+    .boton-enviar {
+        border-width: 2px;
+    }
+    
+    .boton-toggle-password:focus,
+    .boton-enviar:focus,
+    .enlace-olvido:focus,
+    .boton-regresar:focus {
+        outline-width: 3px;
+    }
+}
+
+/* ===== SMOOTH SCROLLING ===== */
+.panel-derecho {
+    scroll-behavior: smooth;
+}

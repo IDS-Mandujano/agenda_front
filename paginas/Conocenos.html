@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conócenos - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Conocenos.css">
+    <script src="../js/Conocenos.js" defer></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-contenedor">
+            <a href="../index.html" class="navbar-logo">
+                <img src="../src/Logo_Sin_Fondo.png" alt="AFGCORPORACIÓN" class="logo-imagen">
+                <span class="logo-text">AFGCORPORACIÓN</span>
+            </a>
+            
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="../index.html" class="nav-link">
+                    <img src="../src/Inicio.png" alt="Inicio" class="icono-nav">
+                    Inicio
+                </a></li>
+                <li><a href="Conocenos.html" class="nav-link activo">
+                    <img src="../src/Contadores.png" alt="Conócenos" class="icono-nav">
+                    Conócenos
+                </a></li>
+                <li><a href="Blog.html" class="nav-link">
+                    <img src="../src/Talleres.png" alt="Blog" class="icono-nav">
+                    Blog
+                </a></li>
+                <li><a href="Asesorias.html" class="nav-link">
+                    <img src="../src/Calendario.png" alt="Asesorías" class="icono-nav">
+                    Asesorías
+                </a></li>
+                <li><a href="../paginas/Rol_Usuario.html" class="nav-link">
+                    <img src="../src/Sesion.png" alt="Sesion" class="icono-nav">
+                    Iniciar sesión
+                </a></li>
+            </ul>
+            
+            <!-- Botón hamburguesa para móvil -->
+            <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
+                <span class="linea-hamburguesa"></span>
+                <span class="linea-hamburguesa"></span>
+                <span class="linea-hamburguesa"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Overlay oscuro -->
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-conocenos">
+        <div class="hero-contenido">
+            <h1 class="hero-titulo">Conócenos</h1>
+            <p class="hero-descripcion">
+                Somos una firma de servicios contables y fiscales comprometida con el éxito de nuestros clientes. Con 
+                años de experiencia en el sector, ofrecemos soluciones objetivas y personalizadas para empresas y 
+                profesionales independientes.
+            </p>
+        </div>
+    </section>
+
+    <!-- Sección Misión y Visión -->
+    <section class="seccion-mision-vision">
+        <div class="contenedor-mision-vision">
+            <!-- Misión -->
+            <div class="tarjeta-mision-vision">
+                <div class="icono-mision-vision icono-mision">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="6"></circle>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                </div>
+                <h2 class="titulo-mision-vision">Nuestra Misión</h2>
+                <p class="texto-mision-vision">
+                    Proporcionar servicios contables y fiscales de la más alta calidad, asegurando a nuestros clientes 
+                    una gestión eficaz y confiable de sus obligaciones fiscales y financieras, para que puedan enfocarse 
+                    en hacer crecer sus negocios.
+                </p>
+            </div>
+
+            <!-- Visión -->
+            <div class="tarjeta-mision-vision">
+                <div class="icono-mision-vision icono-vision">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                <h2 class="titulo-mision-vision">Nuestra Visión</h2>
+                <p class="texto-mision-vision">
+                    Ser la firma líder en servicios contables y fiscales, reconocida por nuestra excelencia profesional, 
+                    innovación y compromiso con el desarrollo sostenible de nuestros clientes y la comunidad.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Estadísticas -->
+    <section class="seccion-estadisticas">
+        <div class="contenedor-estadisticas">
+            <div class="tarjeta-estadistica">
+                <h3 class="numero-estadistica">10+</h3>
+                <p class="label-estadistica">Años de experiencia</p>
+            </div>
+
+            <div class="tarjeta-estadistica">
+                <h3 class="numero-estadistica">500+</h3>
+                <p class="label-estadistica">Clientes satisfechos</p>
+            </div>
+
+            <div class="tarjeta-estadistica">
+                <h3 class="numero-estadistica">50+</h3>
+                <p class="label-estadistica">Consultores certificados</p>
+            </div>
+
+            <div class="tarjeta-estadistica">
+                <h3 class="numero-estadistica">98%</h3>
+                <p class="label-estadistica">Tasa de Satisfacción</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Valores -->
+    <section class="seccion-valores">
+        <div class="contenedor-valores">
+            <h2 class="titulo-seccion">Nuestros Valores</h2>
+            
+            <div class="grid-valores">
+                <!-- Valor 1: Confianza -->
+                <div class="tarjeta-valor">
+                    <div class="icono-valor icono-confianza">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="titulo-valor">Confianza</h3>
+                    <p class="descripcion-valor">
+                        Construimos relaciones basadas en la transparencia y la ética profesional.
+                    </p>
+                </div>
+
+                <!-- Valor 2: Excelencia -->
+                <div class="tarjeta-valor">
+                    <div class="icono-valor icono-excelencia">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3 class="titulo-valor">Excelencia</h3>
+                    <p class="descripcion-valor">
+                        Nos esforzamos por superar las expectativas en cada servicio que ofrecemos.
+                    </p>
+                </div>
+
+                <!-- Valor 3: Compromiso -->
+                <div class="tarjeta-valor">
+                    <div class="icono-valor icono-compromiso">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="titulo-valor">Compromiso</h3>
+                    <p class="descripcion-valor">
+                        Dedicamos el tiempo y esfuerzo necesario para lograr los mejores resultados.
+                    </p>
+                </div>
+
+                <!-- Valor 4: Innovación -->
+                <div class="tarjeta-valor">
+                    <div class="icono-valor icono-innovacion">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 class="titulo-valor">Innovación</h3>
+                    <p class="descripcion-valor">
+                        Utilizamos las últimas tecnologías y metodologías en servicios contables.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Nuestro Equipo -->
+    <section class="seccion-equipo">
+        <div class="contenedor-equipo">
+            <h2 class="titulo-seccion">Nuestro Equipo</h2>
+            <p class="descripcion-equipo">
+                Contamos con un equipo de profesionales altamente capacitados y certificados. Nos especializamos en 
+                diversas áreas de contabilidad, fiscalización y finanzas. Nuestros expertos se actualizan 
+                constantemente para ofrecerte las mejores soluciones y estrategias que impulsen el crecimiento y 
+                estabilidad financiera de tu negocio.
+            </p>
+            
+            <div class="grid-equipo">
+                <!-- Miembro 1 -->
+                <div class="tarjeta-miembro">
+                    <div class="foto-miembro">
+                        <div class="avatar-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="nombre-miembro">María González</h3>
+                    <p class="cargo-miembro">Directora General</p>
+                    <p class="descripcion-miembro">15 años de experiencia en contabilidad fiscal y auditoría</p>
+                </div>
+
+                <!-- Miembro 2 -->
+                <div class="tarjeta-miembro">
+                    <div class="foto-miembro">
+                        <div class="avatar-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="nombre-miembro">Carlos Hernández</h3>
+                    <p class="cargo-miembro">Gerente de Auditoría</p>
+                    <p class="descripcion-miembro">Especialista en auditorías financieras y de cumplimiento</p>
+                </div>
+
+                <!-- Miembro 3 -->
+                <div class="tarjeta-miembro">
+                    <div class="foto-miembro">
+                        <div class="avatar-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="nombre-miembro">Ana Martínez</h3>
+                    <p class="cargo-miembro">Consultora Fiscal</p>
+                    <p class="descripcion-miembro">Experta en planificación fiscal y cumplimiento tributario</p>
+                </div>
+
+                <!-- Miembro 4 -->
+                <div class="tarjeta-miembro">
+                    <div class="foto-miembro">
+                        <div class="avatar-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="nombre-miembro">Roberto Sánchez</h3>
+                    <p class="cargo-miembro">Contador Público</p>
+                    <p class="descripcion-miembro">Certificado en NIIF y estándares internacionales</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-contenido">
+            <p>&copy; 2025 AFGCORPORACIÓN. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

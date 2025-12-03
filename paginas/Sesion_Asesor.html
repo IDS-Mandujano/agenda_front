@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- ===== META BÁSICOS ===== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- ===== SEO ===== -->
+    <title>Iniciar Sesión - Asesor | AFGCORPORACIÓN</title>
+    <meta name="description" content="Panel de inicio de sesión para asesores de AFGCORPORACIÓN. Accede a tu dashboard y gestiona tus asesorías.">
+    <meta name="keywords" content="asesor, login, dashboard, afgcorporación">
+    <meta name="author" content="AFGCORPORACIÓN">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- ===== OPEN GRAPH ===== -->
+    <meta property="og:title" content="Portal Asesor - AFGCORPORACIÓN">
+    <meta property="og:description" content="Accede a tu panel de asesor">
+    <meta property="og:image" content="../src/Logo.png">
+    <meta property="og:type" content="website">
+    
+    <!-- ===== FAVICON ===== -->
+    <link rel="icon" type="image/png" href="../src/favicon.png">
+    <link rel="apple-touch-icon" href="../src/apple-touch-icon.png">
+    
+    <!-- ===== TEMA COLOR ===== -->
+    <meta name="theme-color" content="#0a5c7a">
+    
+    <!-- ===== STYLESHEETS ===== -->
+    <link rel="stylesheet" href="../estilos/Sesion_Asesor.css">
+    
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="../js/Sesion_Asesor.js" defer></script>
+</head>
+<body>
+    <!-- Botón de regreso -->
+    <a href="../paginas/Rol_Usuario.html" class="boton-regresar" aria-label="Regresar a selección de rol">
+        <img src="../src/Salida.png" alt="" class="icono-regresar" aria-hidden="true">
+    </a>
+
+    <div class="contenedor">
+        <div class="panel-izquierdo">
+            <div class="circulo-perfil">
+                <img src="../src/Logo.png" alt="Logo de AFGCORPORACIÓN - Portal de Asesores" class="imagen-perfil" loading="lazy">
+            </div>
+        </div>
+        
+        <div class="panel-derecho">
+            <!-- Mensaje de bienvenida -->
+            <div class="mensaje-bienvenida">
+                <h1 class="titulo-bienvenida">¡Bienvenido de nuevo!</h1>
+                <p class="subtitulo-bienvenida">Accede a tu panel de asesor</p>
+            </div>
+
+            <h2 class="titulo-formulario">Iniciar sesión</h2>
+            
+            <form class="formulario-login" id="formLogin" novalidate>
+                <div class="grupo-campo">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email"
+                        name="email"
+                        placeholder="Ingresa tu correo electrónico"
+                        autocomplete="email"
+                        required
+                        aria-required="true"
+                        aria-describedby="email-error">
+                    <span id="email-error" class="error-message" role="alert"></span>
+                </div>
+                
+                <div class="grupo-campo">
+                    <label for="password">Contraseña</label>
+                    <div class="contenedor-password">
+                        <input 
+                            type="password" 
+                            id="password"
+                            name="password"
+                            placeholder="Ingresa tu contraseña"
+                            autocomplete="current-password"
+                            required
+                            aria-required="true"
+                            aria-describedby="password-error">
+                        <button 
+                            type="button" 
+                            class="boton-toggle-password" 
+                            id="btnTogglePassword"
+                            aria-label="Mostrar u ocultar contraseña">
+                            <svg id="icono-ojo" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <span id="password-error" class="error-message" role="alert"></span>
+                </div>
+
+                <div class="contenedor-olvido">
+                    <a href="../paginas/Recuperar_Password.html" class="enlace-olvido" id="enlace-recuperar">
+                        ¿Olvidaste tu contraseña? <span class="texto-destacado">clic aquí</span>
+                    </a>
+                </div>
+                
+                <button type="submit" class="boton-enviar" id="btn-submit">
+                    Iniciar Sesión
+                </button>
+                
+                <!-- Mensaje de error general -->
+                <div id="mensaje-error-general" class="mensaje-error-general" role="alert" aria-live="polite"></div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

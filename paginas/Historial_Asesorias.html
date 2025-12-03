@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Asesorías - AFGCORPORACIÓN</title>
+    <link rel="stylesheet" href="../estilos/Historial_Asesorias.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="../js/Historial_Asesorias.js" defer></script>
+</head>
+
+<body>
+    <!-- Botón hamburguesa - Solo visible en móvil -->
+    <button class="boton-hamburguesa" id="boton-menu" aria-label="Abrir menú">
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+        <span class="linea-hamburguesa"></span>
+    </button>
+
+    <!-- Overlay oscuro - Solo para móvil -->
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+    <!-- Menú lateral - Siempre visible en desktop -->
+    <aside class="menu-lateral" id="menu-lateral">
+        <div class="contenedor-menu">
+            <!-- *** CORRECCIÓN: Texto cambiado *** -->
+            <a href="#" class="item-menu">
+                <img src="../src/Logo_Sin_Fondo.png" alt="Logo AFGCORPORACIÓN" class="icono-menu">
+                <span>AFGCORPORACIÓN</span>
+            </a>
+
+            <a href="../paginas/Perfil_Administrador.html" class="item-menu">
+                <img src="../src/Perfil.png" alt="Perfil" class="icono-menu">
+                <span>Perfil</span>
+            </a>
+
+            <a href="../paginas/Control_Usarios.html" class="item-menu">
+                <img src="../src/Contadores.png" alt="Usuarios" class="icono-menu">
+                <span>Control de usuarios</span>
+            </a>
+
+            <a href="../paginas/Blog_Admin.html" class="item-menu">
+                <img src="../src/Talleres.png" alt="Blog" class="icono-menu">
+                <span>blog</span>
+            </a>
+
+            <a href="../paginas/Gestor_Pagos.html" class="item-menu">
+                <img src="../src/Pagos.png" alt="Pagos" class="icono-menu">
+                <span>Gestor de pagos</span>
+            </a>
+
+            <a href="../paginas/Control_Solicitudes.html" class="item-menu">
+                <img src="../src/Solicitudes.png" alt="Solicitudes" class="icono-menu">
+                <span>Control de solicitudes</span>
+            </a>
+
+            <a href="../paginas/Historial_Asesorias.html" class="item-menu activo">
+                <img src="../src/Historial.png" alt="Historial" class="icono-menu">
+                <span>Historial de asesorías</span>
+            </a>
+        </div>
+
+        <!-- ***** BOTÓN DE CERRAR SESIÓN AGREGADO AQUÍ ***** -->
+        <a href="../paginas/Rol_Usuario.html" class="item-menu item-logout" id="logout-button">
+            <img src="../src/Salida.png" alt="Cerrar Sesión" class="icono-menu">
+            <span>Cerrar Sesión</span>
+        </a>
+    </aside>
+
+    <main class="contenido-principal">
+        <!-- Encabezado -->
+        <section class="seccion-encabezado">
+            <div>
+                <h1 class="titulo-pagina">Historial de asesorías</h1>
+                <p class="subtitulo-pagina">Consulta el registro completo de todas las asesorías</p>
+            </div>
+        </section>
+
+        <!-- Tarjetas de estadísticas -->
+        <section class="seccion-estadisticas-historial">
+            <div class="tarjeta-estadistica-historial">
+                <div class="info-estadistica-historial">
+                    <p class="label-estadistica-historial">Total de<br>Asesorías</p>
+                    <p class="numero-estadistica-historial" id="total-asesorias">8</p>
+                </div>
+                <div class="icono-estadistica-historial icono-total-asesorias">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tarjeta-estadistica-historial">
+                <div class="info-estadistica-historial">
+                    <p class="label-estadistica-historial">Completadas</p>
+                    <p class="numero-estadistica-historial" id="completadas">6</p>
+                </div>
+                <div class="icono-estadistica-historial icono-completadas">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tarjeta-estadistica-historial">
+                <div class="info-estadistica-historial">
+                    <p class="label-estadistica-historial">Canceladas</p>
+                    <p class="numero-estadistica-historial" id="canceladas">2</p>
+                </div>
+                <div class="icono-estadistica-historial icono-canceladas">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="tarjeta-estadistica-historial tarjeta-tasa-exito">
+                <div class="info-estadistica-historial">
+                    <p class="label-estadistica-historial">Tasa de Éxito</p>
+                    <p class="numero-estadistica-historial" id="tasa-exito">75%</p>
+                </div>
+                <div class="icono-estadistica-historial icono-tasa-exito">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de tabla con pestañas -->
+        <section class="seccion-tabla-historial">
+            <!-- Pestañas tipo slider -->
+            <div class="contenedor-pestanas-historial" id="contenedor-pestanas-historial">
+                <button class="pestana-historial activa" data-filtro="todas" id="tab-todas">
+                    Todas las asesorías
+                </button>
+                <button class="pestana-historial" data-filtro="completada" id="tab-completadas">
+                    Completadas
+                </button>
+                <button class="pestana-historial" data-filtro="cancelada" id="tab-canceladas">
+                    Canceladas
+                </button>
+                <div class="indicador-pestana-historial" id="indicador-historial"></div>
+            </div>
+
+            <!-- Buscador y controles -->
+            <div class="controles-historial">
+                <div class="buscador-historial">
+                    <svg class="icono-buscar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" class="input-buscar-historial" id="input-buscar"
+                        placeholder="Buscar por cliente, ID, RFC...">
+                </div>
+
+                <div class="controles-derecha">
+                    
+                    <select class="filtro-select" id="filtro-tipo-asesoria">
+                        <option value="todos">Todas las Asesorías</option>
+                    </select>
+
+                    <button class="boton-ordenar" id="btn-ordenar-fecha" title="Ordenar por Fecha">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </button>
+
+                    <button class="boton-exportar-historial" id="btn-exportar-historial">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Exportar Historial
+                    </button>
+                </div>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table class="tabla-historial">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre de Cliente</th>
+                            <th>Modalidad</th>
+                            <th>Tipo de asesoría</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Duración</th>
+                            <th>Estado</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-historial">
+                        <!-- Fila 1 - Completada -->
+                        <tr data-estado="completada" data-tipo="fiscal">
+                            <td>H-001</td>
+                            <td>Juan diego ramos Altamirano</td>
+                            <td>En línea</td>
+                            <td>Fiscal</td>
+                            <td>16/05/2025</td>
+                            <td>10:00 am</td>
+                            <td>1h 30min</td>
+                            <td><span class="badge-estado-historial completada">Completada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 2 - Completada -->
+                        <tr data-estado="completada" data-tipo="contabilidad">
+                            <td>H-002</td>
+                            <td>Maria González Pérez</td>
+                            <td>Presencial</td>
+                            <td>Contabilidad</td>
+                            <td>08/05/2025</td>
+                            <td>2:00 pm</td>
+                            <td>2h 00min</td>
+                            <td><span class="badge-estado-historial completada">Completada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 3 - Completada -->
+                        <tr data-estado="completada" data-tipo="auditoria">
+                            <td>H-003</td>
+                            <td>Carlos Hernández López</td>
+                            <td>En línea</td>
+                            <td>Auditoría</td>
+                            <td>05/05/2025</td>
+                            <td>11:30 am</td>
+                            <td>1h 45min</td>
+                            <td><span class="badge-estado-historial completada">Completada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 4 - Cancelada -->
+                        <tr data-estado="cancelada" data-tipo="nomina">
+                            <td>H-004</td>
+                            <td>Laura Jiménez Morales</td>
+                            <td>Presencial</td>
+                            <td>Nómina</td>
+                            <td>03/05/2025</td>
+                            <td>9:00 am</td>
+                            <td>1h 15min</td>
+                            <td><span class="badge-estado-historial cancelada">Cancelada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 5 - Completada -->
+                        <tr data-estado="completada" data-tipo="fiscal">
+                            <td>H-005</td>
+                            <td>Roberto Sánchez Castro</td>
+                            <td>En línea</td>
+                            <td>Fiscal</td>
+                            <td>01/05/2025</td>
+                            <td>3:30 pm</td>
+                            <td>1h 00min</td>
+                            <td><span class="badge-estado-historial completada">Completada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 6 - Completada -->
+                        <tr data-estado="completada" data-tipo="declaracion-anual">
+                            <td>H-006</td>
+                            <td>Fernando Torres Vega</td>
+                            <td>Presencial</td>
+                            <td>Declaración Anual</td>
+                            <td>28/04/2025</td>
+                            <td>10:00 am</td>
+                            <td>2h 30min</td>
+                            <td><span class="badge-estado-historial completada">Completada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 7 - Completada -->
+                        <tr data-estado="completada" data-tipo="contabilidad">
+                            <td>H-007</td>
+                            <td>Ana Martínez Ruiz</td>
+                            <td>En línea</td>
+                            <td>Contabilidad</td>
+                            <td>25/04/2025</td>
+                            <td>4:00 pm</td>
+                            <td>1h 20min</td>
+                            <td><span class="badge-estado-historial completada">Completada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 8 - Cancelada -->
+                        <tr data-estado="cancelada" data-tipo="fiscal">
+                            <td>H-008</td>
+                            <td>Pedro Ramírez García</td>
+                            <td>Presencial</td>
+                            <td>Fiscal</td>
+                            <td>20/04/2025</td>
+                            <td>11:00 am</td>
+                            <td>1h 40min</td>
+                            <td><span class="badge-estado-historial cancelada">Cancelada</span></td>
+                            <td>
+                                <button class="btn-detalles-historial" title="Ver detalles">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="paginacion">
+                <span class="info-paginacion" id="info-paginacion">Mostrando 8 de 8 registros</span>
+                <div class="controles-paginacion">
+                    <button class="btn-pagina" id="btn-anterior" disabled>Anterior</button>
+                    <button class="btn-pagina activo">1</button>
+                    <button class="btn-pagina">2</button>
+                    <button class="btn-pagina">3</button>
+                    <button class="btn-pagina" id="btn-siguiente">Siguiente</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal: Confirmar exportación -->
+    <div id="modal-confirmar-exportar-historial" class="modal-overlay">
+        <div class="modal-confirmacion">
+            <div class="modal-icono-info">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </div>
+            <h3 class="modal-titulo-confirmacion">¿Exportar Historial a Excel?</h3>
+            <p class="modal-mensaje-confirmacion">Se exportarán todos los registros visibles actualmente en la tabla.
+            </p>
+            <div class="botones-confirmacion">
+                <button class="boton-cancelar-modal" id="btn-cancelar-exportar-historial">Cancelar</button>
+                <button class="boton-confirmar-verde" id="btn-confirmar-exportar-historial">Sí, exportar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

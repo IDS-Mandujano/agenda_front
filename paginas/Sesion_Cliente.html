@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- ===== META BÁSICOS ===== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- ===== SEO ===== -->
+    <title>Iniciar Sesión - AFGCORPORACIÓN</title>
+    <meta name="description" content="Inicia sesión en AFGCORPORACIÓN para acceder a tus asesorías contables y fiscales personalizadas.">
+    <meta name="keywords" content="login, iniciar sesión, afgcorporación, asesorías">
+    <meta name="author" content="AFGCORPORACIÓN">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- ===== OPEN GRAPH ===== -->
+    <meta property="og:title" content="Iniciar Sesión - AFGCORPORACIÓN">
+    <meta property="og:description" content="Accede a tu cuenta de AFGCORPORACIÓN">
+    <meta property="og:image" content="../src/Logo.png">
+    <meta property="og:type" content="website">
+    
+    <!-- ===== FAVICON ===== -->
+    <link rel="icon" type="image/png" href="../src/favicon.png">
+    <link rel="apple-touch-icon" href="../src/apple-touch-icon.png">
+    
+    <!-- ===== TEMA COLOR ===== -->
+    <meta name="theme-color" content="#0a5c7a">
+    
+    <!-- ===== STYLESHEETS ===== -->
+    <link rel="stylesheet" href="../estilos/Sesion_Cliente.css">
+    
+    <!-- ===== JAVASCRIPT ===== -->
+     <script src="../js/service.js"></script>
+    <script src="../js/Sesion_Cliente.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="profile-circle">
+                <img src="../src/Logo.png" alt="Logo de AFGCORPORACIÓN - Asesorías Contables y Fiscales" loading="lazy">
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <h1>Iniciar sesión</h1>
+            <form class="login-form" novalidate>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email"
+                        placeholder="Ingrese tu correo electrónico" 
+                        autocomplete="email"
+                        required
+                        aria-required="true"
+                        aria-describedby="email-error">
+                    <span id="email-error" class="error-message" role="alert"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="password-container">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            placeholder="Ingresa tu contraseña" 
+                            autocomplete="current-password"
+                            required
+                            aria-required="true"
+                            aria-describedby="password-error">
+                        <button 
+                            type="button" 
+                            class="toggle-password" 
+                            id="toggle-password-btn"
+                            aria-label="Mostrar u ocultar contraseña">
+                            <svg id="icono-ojo" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <span id="password-error" class="error-message" role="alert"></span>
+                </div>
+                <button type="submit" class="btn-submit" id="btn-submit">Iniciar Sesión</button>
+            </form>
+            
+            <p class="signup-text">
+                ¿No tienes cuenta? <a href="../paginas/Crear_CuentaC.html" class="signup-link">Crea una aquí</a>
+            </p>
+            <p class="signup-text">
+                ¿Olvidaste tu contraseña? <a href="../paginas/Recuperar_Password.html" class="signup-link">clic aqui</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

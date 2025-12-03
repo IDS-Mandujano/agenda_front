@@ -1,0 +1,195 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #005D89 0%, #005D89 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* Contenedor principal */
+.contenedor-principal {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Icono superior */
+.contenedor-icono-superior {
+    margin-bottom: 30px;
+}
+
+.icono-superior {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+/* Logo/Gráfica central */
+.contenedor-logo-central {
+    background-color: white;
+    border-radius: 25px;
+    padding: 40px 60px;
+    margin-bottom: 40px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.logo-central {
+    width: 280px;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Título */
+.contenedor-titulo {
+    text-align: center;
+    color: white;
+    margin-bottom: 50px;
+}
+
+.titulo-principal {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.subtitulo {
+    font-size: 16px;
+    opacity: 0.95;
+    font-weight: 400;
+}
+
+/* Contenedor de tarjetas */
+.contenedor-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
+}
+
+/* Tarjetas de acceso */
+.tarjeta-acceso {
+    background-color: white;
+    border-radius: 15px;
+    padding: 35px 25px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tarjeta-acceso:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Contenedor del ícono */
+.contenedor-icono-tarjeta {
+    width: 80px;
+    height: 80px;
+    background-color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-acceso:hover .contenedor-icono-tarjeta {
+    background-color: #1a6b8a;
+    transform: scale(1.1);
+}
+
+.icono-tarjeta {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+/* Título de tarjeta */
+.titulo-tarjeta {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+/* Descripción de tarjeta */
+.descripcion-tarjeta {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedor-tarjetas {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .titulo-principal {
+        font-size: 28px;
+    }
+    
+    .subtitulo {
+        font-size: 14px;
+    }
+    
+    .contenedor-logo-central {
+        padding: 30px 40px;
+    }
+    
+    .logo-central {
+        width: 220px;
+    }
+    
+    .tarjeta-acceso {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .icono-superior {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .contenedor-logo-central {
+        padding: 25px 30px;
+    }
+    
+    .logo-central {
+        width: 180px;
+    }
+    
+    .contenedor-icono-tarjeta {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .icono-tarjeta {
+        width: 35px;
+        height: 35px;
+    }
+}
