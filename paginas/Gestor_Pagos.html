@@ -72,6 +72,34 @@
             </div>
         </section>
 
+                <div class="contenedor-graficas"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; align-items: start;">
+
+            <div class="tarjeta-grafica"
+                style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: 600;">📊 Flujo de Ingresos vs Reembolsos
+                    </h3>
+                </div>
+
+                <div class="chart-container" style="position: relative; height: 350px; width: 100%; overflow: hidden;">
+                    <canvas id="grafica-finanzas"></canvas>
+                </div>
+            </div>
+
+            <div class="tarjeta-grafica"
+                style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%;">
+                <h3 style="margin-bottom: 20px; color: #4b5563; font-size: 1.25rem; font-weight: 600;">📂 Servicios
+                    Realizados (Pagados)</h3>
+
+                <div class="chart-container"
+                    style="position: relative; height: 350px; width: 100%; overflow: hidden; display: flex; justify-content: center;">
+                    <canvas id="grafica-servicios"></canvas>
+                </div>
+            </div>
+
+        </div>
+
         <section class="seccion-estadisticas-pagos">
             <div class="tarjeta-estadistica-pago">
                 <div class="info-estadistica-pago">
@@ -131,34 +159,6 @@
                 </div>
             </div>
         </section>
-
-        <div class="contenedor-graficas"
-            style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; align-items: start;">
-
-            <div class="tarjeta-grafica"
-                style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: 600;">📊 Flujo de Ingresos vs Reembolsos
-                    </h3>
-                </div>
-
-                <div class="chart-container" style="position: relative; height: 350px; width: 100%; overflow: hidden;">
-                    <canvas id="grafica-finanzas"></canvas>
-                </div>
-            </div>
-
-            <div class="tarjeta-grafica"
-                style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%;">
-                <h3 style="margin-bottom: 20px; color: #4b5563; font-size: 1.25rem; font-weight: 600;">📂 Servicios
-                    Realizados (Pagados)</h3>
-
-                <div class="chart-container"
-                    style="position: relative; height: 350px; width: 100%; overflow: hidden; display: flex; justify-content: center;">
-                    <canvas id="grafica-servicios"></canvas>
-                </div>
-            </div>
-
-        </div>
 
         <section class="seccion-tabla-pagos">
             <div class="controles-tabla-pagos">

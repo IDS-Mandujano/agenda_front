@@ -22,18 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const contenedorPestanas = document.querySelector('.contenedor-pestanas-historial');
     
     const inputBuscar = document.getElementById('input-buscar');
-    const filtroTipo = document.getElementById('filtro-tipo-asesoria'); // <--- EL SELECT
+    const filtroTipo = document.getElementById('filtro-tipo-asesoria');
     const btnOrdenarFecha = document.getElementById('btn-ordenar-fecha');
     const btnExportar = document.getElementById('btn-exportar-historial');
     const infoPaginacion = document.getElementById('info-paginacion');
 
-    // Estadísticas
     const statTotal = document.getElementById('total-asesorias');
     const statCompletadas = document.getElementById('completadas');
     const statCanceladas = document.getElementById('canceladas');
-    const statTasaExito = document.getElementById('tasa-exito');
+    const statPendientes = document.getElementById('pendientes'); 
 
-    // Modal Exportar
     const modalExportar = document.getElementById('modal-confirmar-exportar-historial');
     const btnCancelarExportar = document.getElementById('btn-cancelar-exportar-historial');
     const btnConfirmarExportar = document.getElementById('btn-confirmar-exportar-historial');
@@ -42,35 +40,33 @@ document.addEventListener('DOMContentLoaded', () => {
     let historialGlobal = [];
     let historialFiltrado = [];
     let ordenAscendente = false;
+    
+    // Variables para gráficas
+    let chartEstados = null;
+    let chartModalidad = null;
 
     // ===== INICIALIZACIÓN =====
     init();
 
     async function init() {
         setupEventListeners();
-        // 1. Cargar Servicios para el filtro
         await cargarServiciosFiltro(); 
-        // 2. Cargar Historial
         await cargarHistorial();
-        
         setTimeout(posicionarIndicador, 100);
     }
 
     // ==========================================
-    // 0. CARGAR SERVICIOS (FILTRO) - ¡AQUÍ ESTÁ LO QUE FALTABA!
+    // 0. CARGAR SERVICIOS (FILTRO)
     // ==========================================
     async function cargarServiciosFiltro() {
         try {
             const response = await fetch(`${API_BASE_URL}/api/servicios`);
             if (response.ok) {
                 const servicios = await response.json();
-                
-                // Limpiar select y dejar solo "Todos"
-                filtroTipo.innerHTML = '<option value="todos">Todas las Asesorías</option>';
-                
+                filtroTipo.innerHTML = '<option value="todos">Todos los Servicios</option>';
                 servicios.forEach(s => {
                     const option = document.createElement('option');
-                    option.value = s.nombre; // Usamos el nombre exacto para filtrar
+                    option.value = s.nombre;
                     option.textContent = s.nombre;
                     filtroTipo.appendChild(option);
                 });
@@ -85,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     async function cargarHistorial() {
         try {
-            const response = await fetch(`${API_BASE_URL}/admin/cita/listar`, { // Ojo con tu ruta singular/plural
+            const response = await fetch(`${API_BASE_URL}/admin/cita/listar`, { 
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -104,22 +100,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 fechaHora: new Date(`${cita.fecha}T${cita.hora}`),
                 modalidad: cita.modalidad || 'Presencial',
                 estado: cita.estado || 'Pendiente',
-                duracion: '1h', 
                 notas: cita.notas || ''
             }));
 
-            // Orden inicial
+            // Orden inicial (Más recientes primero)
             historialGlobal.sort((a, b) => b.fechaHora - a.fechaHora);
 
             historialFiltrado = [...historialGlobal];
             
             actualizarEstadisticas();
-            renderizarTabla();
-            actualizarPaginacionTexto();
+            aplicarFiltros(); 
+            
+            // ¡AQUÍ RENDERIZAMOS LAS GRÁFICAS!
+            renderizarGraficas();
 
         } catch (error) {
             console.error(error);
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:red">Error: ${error.message}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:red">Error: ${error.message}</td></tr>`;
         }
     }
 
@@ -130,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
 
         if (historialFiltrado.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 30px; color: #999;">No se encontraron asesorías</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 30px; color: #999;">No se encontraron asesorías</td></tr>`;
             return;
         }
 
@@ -138,23 +135,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             
             let claseEstado = 'pendiente';
-            const est = cita.estado;
+            if (cita.estado === 'Completada') claseEstado = 'completada';
+            if (cita.estado === 'Confirmada') claseEstado = 'completada';
+            if (cita.estado === 'Cancelada') claseEstado = 'cancelada';
 
-            if (est === 'Completada' || est === 'Confirmada') claseEstado = 'completada';
-            if (est === 'Cancelada') claseEstado = 'cancelada';
+            const iconoModalidad = cita.modalidad.toLowerCase().includes('linea') || cita.modalidad.toLowerCase().includes('meet') 
+                ? '💻 En línea' 
+                : '🏢 Presencial';
 
             tr.innerHTML = `
                 <td>${cita.id}</td>
                 <td><strong>${cita.cliente}</strong></td>
-                <td>
-                    <span class="badge-modalidad">
-                        ${cita.modalidad.includes('Online') || cita.modalidad.includes('Meet') ? '💻' : '🏢'} ${cita.modalidad}
-                    </span>
-                </td>
                 <td>${cita.servicio}</td>
+                <td><span class="badge-modalidad">${iconoModalidad}</span></td>
                 <td>${formatearFecha(cita.fecha)}</td>
                 <td>${cita.hora}</td>
-                <td>${cita.duracion}</td>
                 <td><span class="badge-estado-historial ${claseEstado}">${cita.estado}</span></td>
                 <td>
                     <button class="btn-detalles-historial" onclick="verDetalles(${cita.idReal})">
@@ -167,26 +162,20 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             tbody.appendChild(tr);
         });
+        
+        actualizarPaginacionTexto();
     }
 
     function aplicarFiltros() {
         const texto = inputBuscar.value.toLowerCase();
-        const tipoServicio = filtroTipo.value; // Valor seleccionado en el dropdown
-        
+        const tipoServicio = filtroTipo.value;
         const pestanaActiva = document.querySelector('.pestana-historial.activa');
         const filtroEstado = pestanaActiva ? pestanaActiva.getAttribute('data-filtro') : 'todas';
 
         historialFiltrado = historialGlobal.filter(cita => {
-            // 1. Búsqueda de Texto
-            const matchTexto = cita.cliente.toLowerCase().includes(texto) || 
-                               cita.id.toLowerCase().includes(texto) || 
-                               cita.servicio.toLowerCase().includes(texto);
-            
-            // 2. Filtro Servicio (CORREGIDO)
-            // Si es "todos", pasa. Si no, el nombre debe coincidir exactamente.
+            const matchTexto = cita.cliente.toLowerCase().includes(texto) || cita.id.toLowerCase().includes(texto);
             const matchTipo = (tipoServicio === 'todos') || (cita.servicio === tipoServicio);
 
-            // 3. Filtro Estado (Pestañas)
             let matchEstado = true;
             if (filtroEstado === 'completada') matchEstado = (cita.estado === 'Completada' || cita.estado === 'Confirmada');
             if (filtroEstado === 'cancelada') matchEstado = cita.estado === 'Cancelada';
@@ -196,32 +185,105 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderizarTabla();
-        actualizarPaginacionTexto();
-        actualizarEstadisticas();
     }
 
     function actualizarEstadisticas() {
         const total = historialGlobal.length;
         const completadas = historialGlobal.filter(c => c.estado === 'Completada' || c.estado === 'Confirmada').length;
         const canceladas = historialGlobal.filter(c => c.estado === 'Cancelada').length;
-        
-        const tasa = total > 0 ? Math.round((completadas / total) * 100) : 0;
+        const pendientes = historialGlobal.filter(c => c.estado === 'Pendiente').length;
 
         if(statTotal) statTotal.textContent = total;
         if(statCompletadas) statCompletadas.textContent = completadas;
         if(statCanceladas) statCanceladas.textContent = canceladas;
-        if(statTasaExito) statTasaExito.textContent = `${tasa}%`;
+        if(statPendientes) statPendientes.textContent = pendientes;
     }
 
+    // ==========================================
+    // 3. GRÁFICAS (CHART.JS) - NUEVO
+    // ==========================================
+    function renderizarGraficas() {
+        if (historialGlobal.length === 0) return;
+
+        // --- PREPARAR DATOS ESTADOS ---
+        let countCompletadas = 0;
+        let countCanceladas = 0;
+        let countPendientes = 0;
+
+        historialGlobal.forEach(cita => {
+            if (cita.estado === 'Completada' || cita.estado === 'Confirmada') countCompletadas++;
+            else if (cita.estado === 'Cancelada') countCanceladas++;
+            else countPendientes++;
+        });
+
+        // --- PREPARAR DATOS MODALIDAD ---
+        let countOnline = 0;
+        let countPresencial = 0;
+
+        historialGlobal.forEach(cita => {
+            if (cita.modalidad.toLowerCase().includes('linea') || cita.modalidad.toLowerCase().includes('meet')) {
+                countOnline++;
+            } else {
+                countPresencial++;
+            }
+        });
+
+        // --- RENDERIZAR GRÁFICA ESTADOS ---
+        const ctxEstados = document.getElementById('grafica-estados').getContext('2d');
+        if (chartEstados) chartEstados.destroy();
+
+        chartEstados = new Chart(ctxEstados, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completadas', 'Canceladas', 'Pendientes'],
+                datasets: [{
+                    data: [countCompletadas, countCanceladas, countPendientes],
+                    backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // --- RENDERIZAR GRÁFICA MODALIDAD ---
+        const ctxModalidad = document.getElementById('grafica-modalidad').getContext('2d');
+        if (chartModalidad) chartModalidad.destroy();
+
+        chartModalidad = new Chart(ctxModalidad, {
+            type: 'doughnut',
+            data: {
+                labels: ['En Línea', 'Presencial'],
+                datasets: [{
+                    data: [countOnline, countPresencial],
+                    backgroundColor: ['#3b82f6', '#8b5cf6'], // Azul y Violeta
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+
+    // ==========================================
+    // 4. UTILS & LISTENERS
+    // ==========================================
     function actualizarPaginacionTexto() {
         if(infoPaginacion) {
-            infoPaginacion.textContent = `Mostrando ${historialFiltrado.length} de ${historialGlobal.length} registros`;
+            infoPaginacion.textContent = `Mostrando ${historialFiltrado.length} registros`;
         }
     }
 
-    // ==========================================
-    // 3. FUNCIONES GLOBALES
-    // ==========================================
     window.verDetalles = (idReal) => {
         const cita = historialGlobal.find(c => c.idReal === idReal);
         if (cita) {
@@ -231,9 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ID: ${cita.id}
                 Cliente: ${cita.cliente}
                 Servicio: ${cita.servicio}
+                Modalidad: ${cita.modalidad}
                 Fecha: ${cita.fecha}
                 Hora: ${cita.hora}
-                Modalidad: ${cita.modalidad}
                 Estado: ${cita.estado}
                 Notas: ${cita.notas}
             `);
@@ -242,26 +304,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function exportarExcel() {
         if (typeof XLSX === 'undefined') return alert('Librería XLSX no cargada');
-
         const datosExcel = historialFiltrado.map(c => ({
             "ID": c.id,
             "Cliente": c.cliente,
             "Servicio": c.servicio,
+            "Modalidad": c.modalidad,
             "Fecha": c.fecha,
             "Hora": c.hora,
-            "Modalidad": c.modalidad,
             "Estado": c.estado
         }));
-
         const ws = XLSX.utils.json_to_sheet(datosExcel);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Historial");
         XLSX.writeFile(wb, `Historial_AFG_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
 
-    // ==========================================
-    // 4. UTILS & LISTENERS
-    // ==========================================
     function formatearFecha(fechaISO) {
         if (!fechaISO) return "-";
         const [y, m, d] = fechaISO.split('-');
@@ -279,7 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupEventListeners() {
-        // Pestañas
         pestanas.forEach(pestana => {
             pestana.addEventListener('click', function() {
                 pestanas.forEach(p => p.classList.remove('activa'));
@@ -289,11 +345,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Filtros
         if(inputBuscar) inputBuscar.addEventListener('input', aplicarFiltros);
-        if(filtroTipo) filtroTipo.addEventListener('change', aplicarFiltros); // <--- EVENTO PARA EL SELECT
+        if(filtroTipo) filtroTipo.addEventListener('change', aplicarFiltros);
 
-        // Ordenar
         if(btnOrdenarFecha) btnOrdenarFecha.addEventListener('click', () => {
             ordenAscendente = !ordenAscendente;
             historialFiltrado.sort((a, b) => {
@@ -303,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btnOrdenarFecha.style.transform = ordenAscendente ? 'rotate(180deg)' : 'rotate(0deg)';
         });
 
-        // Exportar
         if (btnExportar) btnExportar.addEventListener('click', () => {
             if(historialFiltrado.length === 0) return alert("No hay datos para exportar");
             modalExportar.classList.add('activo');
@@ -314,7 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modalExportar.classList.remove('activo');
         };
 
-        // Cerrar modales al click fuera
         window.onclick = (e) => {
             if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('activo');
         };
