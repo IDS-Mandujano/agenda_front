@@ -78,69 +78,95 @@ body {
 }
 
 /* ===== MENÚ LATERAL ===== */
+/* Menú lateral - Siempre visible en desktop */
 .menu-lateral {
-    width: 250px;
-    background: linear-gradient(180deg, #117a8b 0%, #0e5d6b 100%);
+    width: 260px;
+    background: #0a5c7a;
+    padding: 0;
     position: fixed;
     height: 100vh;
-    padding: 0;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
     z-index: 1000;
+    transform: translateX(0);
     transition: transform 0.3s ease;
-    /* --- CORRECCIÓN 1 --- */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
 }
 
-.navegacion-menu {
+.menu-lateral.abierto {
+    transform: translateX(0);
+}
+
+/* Contenedor del logo */
+.contenedor-logo {
+    background: #0a5c7a;
+    padding: 25px 20px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-empresa {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.imagen-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.nombre-empresa {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.contenedor-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
     padding: 20px 0;
-    margin-top: 0;
-    /* --- CORRECCIÓN 2 --- */
-    flex: 1; /* Esto empuja el botón de logout hacia abajo */
 }
 
 .item-menu {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 16px 25px;
-    color: rgba(255, 255, 255, 0.9);
+    gap: 10px;
+    padding: 12px 20px;
+    color: white;
     text-decoration: none;
     font-size: 15px;
-    font-weight: 400;
-    transition: all 0.2s ease;
-    border-left: 3px solid transparent;
-    position: relative;
+    transition: background-color 0.3s ease;
 }
 
 .item-menu:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .item-menu.activo {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: white;
-    border-left-color: white;
-    font-weight: 500;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-left: 3px solid white;
 }
 
 .icono-menu {
     width: 20px;
     height: 20px;
-    stroke: rgba(255, 255, 255, 0.9);
-    flex-shrink: 0;
-}
-
-.item-menu:hover .icono-menu,
-.item-menu.activo .icono-menu {
-    stroke: white;
-}
-
-.texto-menu {
-    flex: 1;
+    object-fit: contain;
 }
 
 /* ===== CONTENIDO PRINCIPAL ===== */
