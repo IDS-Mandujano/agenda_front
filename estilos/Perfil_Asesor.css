@@ -82,91 +82,119 @@ body {
 .menu-lateral {
     width: 260px;
     background: #0a5c7a;
-    padding: 0;
     position: fixed;
     height: 100vh;
-    overflow-y: auto;
+    padding: 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    transform: translateX(0);
     transition: transform 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
 }
 
-.menu-lateral.abierto {
-    transform: translateX(0);
-}
-
-/* Contenedor del logo */
 .contenedor-logo {
-    background: #0a5c7a;
     padding: 25px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo-empresa {
     width: 80px;
     height: 80px;
+    background-color: white;
+    border-radius: 50%;
+    margin: 0 auto 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    border-radius: 50%;
-    padding: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .imagen-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    width: 50px;
+    height: auto;
 }
 
 .nombre-empresa {
-    font-size: 18px;
-    font-weight: 700;
     color: white;
-    text-align: center;
-    letter-spacing: 0.5px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-.contenedor-menu {
+.navegacion-menu {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    flex: 1;
     padding: 20px 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.navegacion-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.navegacion-menu::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.navegacion-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
 }
 
 .item-menu {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    color: white;
+    gap: 15px;
+    padding: 12px 25px;
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-size: 15px;
-    transition: background-color 0.3s ease;
+    font-weight: 400;
+    transition: all 0.2s ease;
 }
 
 .item-menu:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
 }
 
 .item-menu.activo {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-left: 3px solid white;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: white;
+    font-weight: 500;
 }
 
 .icono-menu {
     width: 20px;
     height: 20px;
-    object-fit: contain;
+    stroke: rgba(255, 255, 255, 0.9);
+    flex-shrink: 0;
+}
+
+.item-menu:hover .icono-menu,
+.item-menu.activo .icono-menu {
+    stroke: white;
+}
+
+.texto-menu {
+    flex: 1;
+}
+
+.item-logout {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.item-logout:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.item-logout:hover .icono-menu {
+    stroke: white !important;
 }
 
 /* ===== CONTENIDO PRINCIPAL ===== */

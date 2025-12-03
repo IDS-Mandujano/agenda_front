@@ -79,17 +79,47 @@ body {
 
 /* ===== MENÚ LATERAL ===== */
 .menu-lateral {
-    width: 250px;
-    background: linear-gradient(180deg, #117a8b 0%, #0e5d6b 100%);
+    width: 260px;
+    background: #0a5c7a;
     position: fixed;
     height: 100vh;
     padding: 0;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     transition: transform 0.3s ease;
-    /* --- CORRECCIÓN 1 --- */
     display: flex;
     flex-direction: column;
+}
+
+/* ===== LOGO Y NOMBRE EMPRESA ===== */
+.contenedor-logo {
+    padding: 25px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-empresa {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imagen-logo {
+    width: 50px;
+    height: auto;
+}
+
+.nombre-empresa {
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .navegacion-menu {
@@ -97,7 +127,8 @@ body {
     flex-direction: column;
     padding: 20px 0;
     /* --- CORRECCIÓN 2 --- */
-    flex: 1; /* Esto empuja el botón de logout hacia abajo */
+    flex: 1;
+    /* Esto empuja el botón de logout hacia abajo */
 }
 
 .item-menu {
@@ -353,7 +384,7 @@ body {
     .detalles-asesoria {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .contenedor-estadisticas {
         grid-template-columns: 1fr;
     }
@@ -363,30 +394,30 @@ body {
     .boton-hamburguesa {
         display: flex;
     }
-    
+
     .menu-lateral {
         transform: translateX(-100%);
     }
-    
+
     .menu-lateral.abierto {
         transform: translateX(0);
     }
-    
+
     .contenido-principal {
         margin-left: 0;
         max-width: 100%;
         padding: 80px 20px 20px 20px;
     }
-    
+
     .titulo-pagina {
         font-size: 26px;
     }
-    
+
     .detalles-asesoria {
         grid-template-columns: 1fr;
         gap: 15px;
     }
-    
+
     .tarjeta-asesoria {
         padding: 20px;
     }
@@ -396,25 +427,25 @@ body {
     .contenido-principal {
         padding: 70px 15px 15px 15px;
     }
-    
+
     .titulo-pagina {
         font-size: 22px;
     }
-    
+
     .tarjeta-estadistica {
         padding: 20px;
     }
-    
+
     .icono-estadistica {
         width: 60px;
         height: 60px;
     }
-    
+
     .icono-estadistica svg {
         width: 28px;
         height: 28px;
     }
-    
+
     .numero-estadistica {
         font-size: 30px;
     }
@@ -422,9 +453,12 @@ body {
 
 /* --- ESTILOS NUEVOS PARA EL LOGOUT --- */
 .item-logout {
-    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Separador */
-    margin-top: auto; /* Empuja al fondo */
-    margin-bottom: 20px; /* Espacio inferior */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    /* Separador */
+    margin-top: auto;
+    /* Empuja al fondo */
+    margin-bottom: 20px;
+    /* Espacio inferior */
 }
 
 .item-logout:hover {

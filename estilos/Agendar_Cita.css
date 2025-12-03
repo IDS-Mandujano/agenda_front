@@ -79,8 +79,8 @@ body {
 
 /* ===== MENÚ LATERAL ===== */
 .menu-lateral {
-    width: 250px;
-    background: linear-gradient(180deg, #117a8b 0%, #0e5d6b 100%);
+    width: 260px;
+    background: #0a5c7a;
     position: fixed;
     height: 100vh;
     padding: 0;
@@ -91,51 +91,69 @@ body {
     flex-direction: column;
 }
 
-.logo-contenedor {
-    background: linear-gradient(135deg, #0d6979 0%, #0a4f5c 100%);
+/* ===== LOGO Y NOMBRE EMPRESA ===== */
+.contenedor-logo {
     padding: 25px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+    text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.logo-imagen {
-    width: 45px;
-    height: 45px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
+.logo-empresa {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.logo-texto {
+.imagen-logo {
+    width: 50px;
+    height: auto;
+}
+
+.nombre-empresa {
     color: white;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
+/* ===== NAVEGACIÓN ===== */
 .navegacion-menu {
     display: flex;
     flex-direction: column;
-    padding: 0;
-    margin-top: 0;
+    padding: 20px 0;
     flex: 1;
+    overflow-y: auto;
+}
+
+.navegacion-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.navegacion-menu::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.navegacion-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
 }
 
 .item-menu {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 16px 25px;
+    padding: 12px 25px;
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-size: 15px;
     font-weight: 400;
     transition: all 0.2s ease;
-    border-left: 3px solid transparent;
 }
 
 .item-menu:hover {
@@ -146,7 +164,6 @@ body {
 .item-menu.activo {
     background-color: rgba(255, 255, 255, 0.12);
     color: white;
-    border-left-color: white;
     font-weight: 500;
 }
 
@@ -157,10 +174,7 @@ body {
     flex-shrink: 0;
 }
 
-.item-menu:hover .icono-menu {
-    stroke: white;
-}
-
+.item-menu:hover .icono-menu,
 .item-menu.activo .icono-menu {
     stroke: white;
 }
