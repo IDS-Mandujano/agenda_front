@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlayMenu = document.getElementById('overlay-menu');
     const btnLogout = document.getElementById('logout-button');
     const tbodyPagos = document.getElementById('tbody-pagos');
-    
+
     // Controles de tabla
     const inputBuscar = document.getElementById('input-buscar');
     const filtroEstadoPago = document.getElementById('filtro-estado-pago');
-    const filtroServicio = document.getElementById('filtro-servicio'); 
+    const filtroServicio = document.getElementById('filtro-servicio');
     const btnExportar = document.getElementById('btn-exportar');
 
     // Tarjetas estadísticas
@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let paginaActual = 1;
     const filasPorPagina = 8;
 
+    let chartFinanzas = null;
+    let chartEstados = null;
+
     // --- VALIDACIÓN SESIÓN ---
     if (!token) {
         alert("Sesión expirada");
@@ -50,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- INICIALIZACIÓN ---
     // Llamamos a ambas cargas de datos en paralelo
     Promise.all([cargarDatosDelBackend(), cargarServiciosFiltro()]);
-    
+
     inicializarEventListeners();
 
 
@@ -62,13 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${API_BASE_URL}/api/servicios`);
             if (response.ok) {
                 const servicios = await response.json();
-                
+
                 // Limpiar (dejando la opción 'todos')
                 filtroServicio.innerHTML = '<option value="todos">Todos los Servicios</option>';
-                
+
                 servicios.forEach(servicio => {
                     const option = document.createElement('option');
-                    option.value = servicio.nombre; 
+                    option.value = servicio.nombre;
                     option.textContent = servicio.nombre;
                     filtroServicio.appendChild(option);
                 });
@@ -98,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             todosLosPagos = datos;
             aplicarFiltrosYRenderizar();
+            renderizarGraficas();
 
         } catch (error) {
             console.error(error);
@@ -118,14 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let estadoReal = "Pendiente";
             if (pago.estadoPago === "COMPLETED") estadoReal = "Pagado";
             if (pago.estadoPago === "REFUNDED") estadoReal = "Reembolsado"; // Opcional si quieres filtrar reembolsados
-            
+
             // 1. Filtro Estado (Si el filtro es 'todos', pasa cualquiera)
             // Nota: Si quieres filtrar 'Reembolsado' asegúrate de agregar la opción al HTML select
             const pasaEstado = (estadoFiltro === 'todos') || (estadoReal === estadoFiltro);
-            
+
             // 2. Filtro Servicio 
-            const pasaServicio = (servicioFiltro === 'todos') || 
-                                 (pago.servicioNombre && pago.servicioNombre === servicioFiltro);
+            const pasaServicio = (servicioFiltro === 'todos') ||
+                (pago.servicioNombre && pago.servicioNombre === servicioFiltro);
 
             // 3. Búsqueda general
             const textoBusqueda = `${pago.clienteNombre} ${pago.servicioNombre} ${pago.idCita} ${pago.paypalTransactionId}`.toLowerCase();
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Declaramos las variables antes de usarlas
             let claseEstado = 'pendiente';
             let textoEstado = 'Pendiente';
-            
+
             // Formato base de moneda
             let montoFormato = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(pago.monto);
 
@@ -215,11 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
         totalCobradoEl.textContent = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(totalDinero);
         pagadasEl.textContent = countPagadas;
         totalCitasEl.textContent = todosLosPagos.length;
-        
+
         // Aquí decides qué mostrar en la tarjeta "Pendientes". 
         // Si quieres mostrar Pendientes reales o Reembolsos.
         // Por ahora mostraré: Total - Pagadas (que incluye pendientes y reembolsadas)
-        pendientesEl.textContent = todosLosPagos.length - countPagadas; 
+        pendientesEl.textContent = todosLosPagos.length - countPagadas;
     }
 
     // -------------------------------------------------------
@@ -228,52 +232,52 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderizarPaginacion() {
         const totalPaginas = Math.ceil(pagosFiltrados.length / filasPorPagina) || 1;
         numerosPaginaEl.innerHTML = `<button class="btn-pagina activo">${paginaActual}</button>`;
-        
+
         infoPaginacionEl.textContent = `Página ${paginaActual} de ${totalPaginas}`;
-        
+
         btnAnterior.disabled = paginaActual === 1;
         btnSiguiente.disabled = paginaActual >= totalPaginas;
     }
 
     function inicializarEventListeners() {
         // Menú
-        if(botonMenu) botonMenu.addEventListener('click', () => {
-             menuLateral.classList.toggle('abierto');
-             overlayMenu.classList.toggle('activo');
+        if (botonMenu) botonMenu.addEventListener('click', () => {
+            menuLateral.classList.toggle('abierto');
+            overlayMenu.classList.toggle('activo');
         });
-        if(overlayMenu) overlayMenu.addEventListener('click', () => {
-             menuLateral.classList.remove('abierto');
-             overlayMenu.classList.remove('activo');
+        if (overlayMenu) overlayMenu.addEventListener('click', () => {
+            menuLateral.classList.remove('abierto');
+            overlayMenu.classList.remove('activo');
         });
 
-        if(btnLogout) btnLogout.addEventListener('click', (e) => {
-             e.preventDefault();
-             if(confirm("¿Cerrar sesión?")) { localStorage.clear(); window.location.href='../paginas/Rol_Usuario.html'; }
+        if (btnLogout) btnLogout.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm("¿Cerrar sesión?")) { localStorage.clear(); window.location.href = '../paginas/Rol_Usuario.html'; }
         });
 
         // Filtros
-        inputBuscar.addEventListener('input', () => { paginaActual=1; aplicarFiltrosYRenderizar(); });
-        filtroEstadoPago.addEventListener('change', () => { paginaActual=1; aplicarFiltrosYRenderizar(); });
-        filtroServicio.addEventListener('change', () => { paginaActual=1; aplicarFiltrosYRenderizar(); });
+        inputBuscar.addEventListener('input', () => { paginaActual = 1; aplicarFiltrosYRenderizar(); });
+        filtroEstadoPago.addEventListener('change', () => { paginaActual = 1; aplicarFiltrosYRenderizar(); });
+        filtroServicio.addEventListener('change', () => { paginaActual = 1; aplicarFiltrosYRenderizar(); });
 
         // Paginación
-        btnAnterior.addEventListener('click', () => { if(paginaActual > 1) { paginaActual--; aplicarFiltrosYRenderizar(); } });
-        btnSiguiente.addEventListener('click', () => { 
-             const total = Math.ceil(pagosFiltrados.length / filasPorPagina);
-             if(paginaActual < total) { paginaActual++; aplicarFiltrosYRenderizar(); } 
+        btnAnterior.addEventListener('click', () => { if (paginaActual > 1) { paginaActual--; aplicarFiltrosYRenderizar(); } });
+        btnSiguiente.addEventListener('click', () => {
+            const total = Math.ceil(pagosFiltrados.length / filasPorPagina);
+            if (paginaActual < total) { paginaActual++; aplicarFiltrosYRenderizar(); }
         });
 
         // Exportar Excel
-        if(btnExportar) btnExportar.addEventListener('click', () => {
-            if(pagosFiltrados.length === 0) return alert("Nada para exportar");
-            
+        if (btnExportar) btnExportar.addEventListener('click', () => {
+            if (pagosFiltrados.length === 0) return alert("Nada para exportar");
+
             // Si modalExportar existe, úsalo, si no, exporta directo (fallback)
             if (modalExportar) modalExportar.classList.add('activo');
             else exportarExcel();
         });
 
         if (btnCancelarExportar) btnCancelarExportar.onclick = () => modalExportar.classList.remove('activo');
-        
+
         if (btnConfirmarExportar) btnConfirmarExportar.onclick = () => {
             exportarExcel();
             modalExportar.classList.remove('activo');
@@ -299,4 +303,152 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Librería XLSX no cargada");
         }
     }
+
+    // -------------------------------------------------------
+    // 3. GRÁFICAS (CHART.JS) - LÓGICA CORREGIDA
+    // -------------------------------------------------------
+    function renderizarGraficas() {
+        if (todosLosPagos.length === 0) return;
+
+        // --- GRÁFICA 1: FINANZAS (Línea de Tiempo) ---
+        // Usamos un Map para garantizar orden y unicidad de fechas
+        const mapFinanzas = new Map();
+
+        // 1. Inicializar todas las fechas presentes en los datos
+        // Ordenamos primero para que el Map se llene cronológicamente
+        const pagosOrdenados = [...todosLosPagos].sort((a, b) => new Date(a.fechaCita) - new Date(b.fechaCita));
+
+        pagosOrdenados.forEach(p => {
+            const fecha = p.fechaCita;
+            if (!mapFinanzas.has(fecha)) {
+                mapFinanzas.set(fecha, { ingresos: 0, reembolsos: 0 });
+            }
+
+            const datosDia = mapFinanzas.get(fecha);
+            const monto = parseFloat(p.monto);
+
+            if (p.estadoPago === 'COMPLETED') {
+                datosDia.ingresos += monto;
+            } else if (p.estadoPago === 'REFUNDED') {
+                datosDia.reembolsos += monto;
+            }
+        });
+
+        // 2. Extraer arrays para Chart.js
+        const labelsFechas = Array.from(mapFinanzas.keys());
+        const dataIngresos = Array.from(mapFinanzas.values()).map(d => d.ingresos);
+        const dataReembolsos = Array.from(mapFinanzas.values()).map(d => d.reembolsos);
+
+        // 3. Renderizar Gráfica Finanzas
+        const ctxFinanzas = document.getElementById('grafica-finanzas').getContext('2d');
+        if (chartFinanzas) chartFinanzas.destroy();
+
+        chartFinanzas = new Chart(ctxFinanzas, {
+            type: 'line',
+            data: {
+                labels: labelsFechas,
+                datasets: [
+                    {
+                        label: 'Ingresos ($)',
+                        data: dataIngresos,
+                        borderColor: '#10b981', // Verde
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Reembolsos ($)',
+                        data: dataReembolsos,
+                        borderColor: '#ef4444', // Rojo
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // --- GRÁFICA 2: SERVICIOS (Dona) ---
+
+        // 1. Agrupar conteo por nombre de servicio (SOLO PAGADAS)
+        const conteoServicios = {};
+
+        todosLosPagos.forEach(p => {
+            // Importante: Filtramos por COMPLETED porque un servicio reembolsado "no cuenta" como venta efectiva para esta gráfica
+            // Si quieres incluir reembolsados, quita el if.
+            if (p.estadoPago === 'COMPLETED') {
+                const nombreServicio = p.servicioNombre || 'Otros';
+
+                if (conteoServicios[nombreServicio]) {
+                    conteoServicios[nombreServicio]++;
+                } else {
+                    conteoServicios[nombreServicio] = 1;
+                }
+            }
+        });
+
+        const labelsServicios = Object.keys(conteoServicios);
+        const dataServicios = Object.values(conteoServicios);
+
+        // Paleta de colores
+        const coloresServicios = [
+            '#3b82f6', '#8b5cf6', '#f59e0b', '#10b981', '#ec4899', '#6366f1', '#14b8a6'
+        ];
+
+        // 2. Renderizar Gráfica Servicios
+        // Asegúrate de que en tu HTML el ID sea 'grafica-servicios'
+        const canvasServicios = document.getElementById('grafica-servicios');
+
+        // Verificación de seguridad por si el elemento no existe en el DOM
+        if (canvasServicios) {
+            const ctxServicios = canvasServicios.getContext('2d');
+            if (chartEstados) chartEstados.destroy();
+
+            chartEstados = new Chart(ctxServicios, {
+                type: 'doughnut',
+                data: {
+                    labels: labelsServicios,
+                    datasets: [{
+                        data: dataServicios,
+                        backgroundColor: coloresServicios.slice(0, labelsServicios.length),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'right' },
+                        title: { display: false }
+                    }
+                }
+            });
+        }
+    }
+
 });
