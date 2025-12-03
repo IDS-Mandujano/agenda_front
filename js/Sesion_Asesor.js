@@ -1,5 +1,5 @@
 // ===== CONSTANTES Y CONFIGURACIÓN =====
-const API_BASE_URL = 'http://localhost:7001';
+const API_BASE_URL = 'http://100.31.17.110:7001';
 const RUTA_DASHBOARD = '../paginas/Dashboard_Asesor.html';
 const MIN_PASSWORD_LENGTH = 4; // Ajustado para facilitar pruebas, o pon 8 si prefieres
 

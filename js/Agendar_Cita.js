@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // ===== CONSTANTES Y SELECTORES =====
-    const API_BASE_URL = 'http://localhost:7001'; // Tu servidor Java
+    const API_BASE_URL = 'http://100.31.17.110:7001'; // Tu servidor Java
 
     const botonHamburguesa = document.getElementById('boton-hamburguesa');
     const menuLateral = document.getElementById('menu-lateral');

@@ -1,6 +1,6 @@
 // ===== SESION ADMINISTRADOR / USUARIO - CONEXIÓN REAL AL BACKEND =====
 
-const API_BASE_URL = 'http://localhost:7001'; // Tu Backend Java
+const API_BASE_URL = 'http://100.31.17.110:7001'; // Tu Backend Java
 const RUTA_PERFIL_ADMIN = '../paginas/Perfil_Administrador.html';
 const RUTA_PERFIL_CLIENTE = '../paginas/Perfil_Cliente.html'; // O Agendar_Cita.html
 

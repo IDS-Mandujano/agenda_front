@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:7001';
+const API_BASE_URL = 'http://100.31.17.110:7001';
 
 const ApiService = {
     

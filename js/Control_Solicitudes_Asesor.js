@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
     // ===== CONFIGURACIÓN API =====
-    const API_BASE_URL = 'http://localhost:7001'; // Asegúrate que este puerto es el correcto (usualmente 8080 o 7001 según tu backend)
+    const API_BASE_URL = 'http://100.31.17.110:7001'; // Asegúrate que este puerto es el correcto (usualmente 8080 o 7001 según tu backend)
     const usuarioId = localStorage.getItem('usuarioId');
     const token = localStorage.getItem('token');
 
